@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P Lending Risk Analysis | Syeda Hafsa</title>
+    <meta name="description" content="Case study: exploring default risk in 113,937 Prosper peer-to-peer loans with Python, SQL and Power BI.">
+    <meta name="color-scheme" content="light dark">
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('theme');
+                if (saved === 'dark' || saved === 'light') document.documentElement.setAttribute('data-theme', saved);
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="icon" type="image/png" href="../favicon-32x32.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="topbar">
+    <div class="container bar">
+        <a class="brand" href="../index.html">Syeda Hafsa</a>
+        <a class="back-link" href="../index.html#projects"><i class="fas fa-arrow-left" aria-hidden="true"></i> All projects</a>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to dark theme">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+        </button>
+    </div>
+</header>
+
+<main id="main" class="cs-body">
+
+<section class="cs-head">
+    <div class="container">
+        <p class="eyebrow">Case study · Analytics and BI</p>
+        <h1>Where does the risk sit in a peer-to-peer loan book?</h1>
+        <p class="lede">Data analyst internship project at Technocolabs Software. I cleaned and explored 113,937 loans from the Prosper lending platform to see which signals separate loans that go bad from loans that don't.</p>
+        <dl class="cs-meta">
+            <div><dt>Role</dt><dd>Data analyst intern</dd></div>
+            <div><dt>Tools</dt><dd>Python, pandas, scikit-learn, SQL, Power BI</dd></div>
+            <div><dt>Data</dt><dd>Prosper Loan Data, 113,937 loans</dd></div>
+            <div><dt>Code</dt><dd>Private (internship work), walkthrough on request</dd></div>
+        </dl>
+
+        <!-- Add your main Power BI dashboard screenshot here (exact name): assets/images/p2p/dashboard-overview.png -->
+        <figure class="shot">
+            <img src="../assets/images/p2p/dashboard-overview.png" alt="Power BI dashboard summarising loan volume, default rate and borrower risk" width="1600" height="900">
+            <figcaption>Power BI dashboard built during the internship.</figcaption>
+        </figure>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>The business question</h2>
+        <p>An investor on a P2P platform lends to strangers with no bank in between. Which borrowers and loans carry the most risk, and which of the platform's many fields actually tell you something about that risk?</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>The data</h2>
+        <ul class="plain">
+            <li><strong>Source:</strong> Prosper Loan Data, a public dataset of loans from the US platform Prosper, with a variable-definitions guide.</li>
+            <li><strong>Size:</strong> 113,937 loans and 81 original columns covering the borrower, the loan, pricing and repayment history.</li>
+            <li><strong>Quality checks:</strong> no duplicate rows. Several date columns were heavily incomplete, for example the loan origination date was missing for 74,231 loans, so I dropped the worst ones from the analysis.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Approach</h2>
+        <ol class="steps">
+            <li><strong>Define "bad loan"</strong><span>Created a target column: 1 if a loan was charged off, defaulted or past due, 0 otherwise.</span></li>
+            <li><strong>Clean</strong><span>Filled missing numbers with the median and categories with the most common value, standardised column names, encoded categories and capped outliers at the 1st and 99th percentiles.</span></li>
+            <li><strong>Explore</strong><span>Distributions, box plots, a correlation heatmap across 77 numeric features, and PCA to see which features move together.</span></li>
+            <li><strong>Report</strong><span>Built Power BI dashboards to track loan risk and borrower behaviour.</span></li>
+        </ol>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Key findings</h2>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">01</span>
+            <div>
+                <h3>Roughly 15% of loans went bad</h3>
+                <p>17,010 of the 113,937 loans were charged off, defaulted or past due. That imbalance matters: a model that simply predicts "no default" every time would already look 85% accurate, so any risk model here has to be judged on how many bad loans it catches, not on accuracy.</p>
+                <div class="stats">
+                    <div class="stat"><span class="stat-value">113,937</span><span class="stat-label">loans analysed</span></div>
+                    <div class="stat"><span class="stat-value">17,010</span><span class="stat-label">charged off, defaulted or past due</span></div>
+                    <div class="stat"><span class="stat-value">14.9%</span><span class="stat-label">share of loans that went bad</span></div>
+                </div>
+                <!-- Optional: a Power BI visual of default share. Exact name: assets/images/p2p/dashboard-default-rate.png -->
+                <figure class="shot">
+                    <img src="../assets/images/p2p/dashboard-default-rate.png" alt="Power BI visual showing the share of loans that defaulted" width="1600" height="900">
+                    <figcaption>Default share in the Power BI dashboard.</figcaption>
+                </figure>
+            </div>
+        </article>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">02</span>
+            <div>
+                <h3>Interest rate, APR and lender yield are one signal, not three</h3>
+                <p>Borrower rate and lender yield correlate at 0.999, borrower APR and borrower rate at 0.990, and APR and lender yield at 0.989. For reporting or modelling, keeping all three adds noise and no new information, so one pricing measure is enough.</p>
+                <figure class="shot">
+                    <img src="../assets/images/p2p/correlation-heatmap.png" alt="Correlation heatmap of the numeric loan features. A dark red block near the top left shows borrower rate, lender yield, APR and estimated return moving together." width="1451" height="1101" loading="lazy">
+                    <figcaption>Correlation heatmap of numeric features. The dark red block near the top left is the pricing cluster.</figcaption>
+                </figure>
+            </div>
+        </article>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">03</span>
+            <div>
+                <h3>Risk and pricing form the main axis of variation</h3>
+                <p>Prosper's own risk rating tracks estimated loss closely (correlation 0.943). In the PCA, the first component is built mostly from borrower rate, lender yield, APR, Prosper rating and estimated loss, with the default flag also loading on it. In other words, the biggest pattern in this data is "how risky is this loan and how is it priced". At the same time, the variance is spread across many components, so no single feature explains the book on its own.</p>
+                <figure class="shot">
+                    <img src="../assets/images/p2p/pca-variance.png" alt="Line chart of cumulative explained variance against number of principal components, rising steadily rather than levelling off early." width="847" height="547" loading="lazy">
+                    <figcaption>Cumulative explained variance by number of principal components.</figcaption>
+                </figure>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Recommendation</h2>
+        <div class="callout">
+            <p>For an investor screening loans, start with Prosper's risk rating and estimated loss, since that is where the risk signal concentrates, and treat rate, APR and yield as a single pricing measure rather than three separate checks.</p>
+            <p>For the next step, a default-prediction model, keep one pricing feature, and judge the model on recall and precision for the "bad loan" class, because only about 15% of loans fall in it.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>What I'd do next</h2>
+        <ul class="plain">
+            <li>Re-parse the date columns. Some values were stored as a time only, and those should be treated as missing rather than converted to a date.</li>
+            <li>Split "past due" from "charged off or defaulted" to see whether early lateness behaves like a true default.</li>
+            <li>Use one-hot encoding for unordered categories such as occupation and state, instead of label encoding.</li>
+        </ul>
+        <div class="project-buttons">
+            <a class="btn primary small" href="../index.html#contact">Ask me about this project</a>
+            <a class="btn small" href="../index.html#projects">Back to all projects</a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; <span id="year">2026</span> Syeda Hafsa · <a href="../index.html">Home</a></p>
+    </div>
+</footer>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

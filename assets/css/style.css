@@ -24,6 +24,7 @@
 }
 
 :root[data-theme="dark"] {
+    color-scheme: dark;
     --bg: #0C1824;
     --surface: #132536;
     --ink: #E7EEF5;
@@ -37,6 +38,7 @@
 
 @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
+        color-scheme: dark;
         --bg: #0C1824;
         --surface: #132536;
         --ink: #E7EEF5;
@@ -69,6 +71,7 @@ h1, h2, h3, h4 {
 p { margin: 0 0 1rem; max-width: 65ch; }
 a { color: var(--link); }
 img { max-width: 100%; }
+code { font-family: var(--mono); font-size: 0.9em; background: var(--teal-soft); padding: 0.1em 0.35em; border-radius: 4px; }
 [hidden] { display: none !important; }
 
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
@@ -294,6 +297,71 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .form-group input:focus, .form-group textarea:focus { border-color: var(--teal); }
 .honey { position: absolute; left: -9999px; opacity: 0; height: 0; width: 0; }
 
+/* ---------- Key finding line on project cards ---------- */
+.project-body .result {
+    border-left: 3px solid var(--amber); padding-left: 0.75rem; font-size: 0.97rem;
+}
+.project-body .result strong { font-family: var(--display); }
+.project-body .private-note { font-size: 0.88rem; margin: 0.6rem 0 0; }
+.private-note i { color: var(--link); margin-right: 0.3rem; }
+
+/* ---------- Case-study pages ---------- */
+.back-link { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 0.95rem; white-space: nowrap; }
+.back-link:hover { color: var(--ink); }
+
+.cs-head { padding-block: clamp(2.5rem, 6vw, 4.5rem) 1rem; }
+.eyebrow {
+    font-family: var(--mono); font-size: 0.82rem; color: var(--link);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem;
+}
+.cs-head h1 { font-size: clamp(2rem, 4.5vw, 3rem); margin-bottom: 1rem; max-width: 22ch; }
+.cs-meta {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem;
+    margin: 1.75rem 0 0; padding: 1.1rem 1.25rem;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+}
+.cs-meta dt { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.cs-meta dd { margin: 0.15rem 0 0; font-weight: 500; }
+
+.cs-body .section h2 { font-size: clamp(1.5rem, 3vw, 2rem); margin-bottom: 1rem; }
+.cs-body .section { padding-block: clamp(2rem, 5vw, 3.25rem); }
+
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin: 1.25rem 0; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 1.1rem 1.25rem; }
+.stat-value { display: block; font-family: var(--display); font-size: 2.1rem; font-weight: 700; line-height: 1.1; color: var(--ink); }
+.stat-label { display: block; color: var(--muted); font-size: 0.93rem; margin-top: 0.3rem; }
+
+.finding { display: grid; grid-template-columns: 3rem 1fr; gap: 0 1rem; margin-bottom: 2.75rem; }
+.finding-num {
+    font-family: var(--mono); font-size: 0.9rem; color: var(--link);
+    width: 2.6rem; height: 2.6rem; border-radius: 50%; display: grid; place-items: center;
+    background: var(--teal-soft);
+}
+.finding h3 { font-size: 1.3rem; margin: 0.35rem 0 0.6rem; }
+.finding > div { min-width: 0; }
+
+.shot { margin: 1rem 0 0; }
+.shot img {
+    display: block; width: 100%; height: auto; border-radius: 10px;
+    border: 1px solid var(--line); background: #fff;
+}
+.shot figcaption { color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; max-width: 65ch; }
+/* Shown only when previewing locally and the image file is missing */
+.shot-missing {
+    display: grid; place-items: center; text-align: center; min-height: 180px; padding: 1rem;
+    border: 2px dashed var(--line); border-radius: 10px; color: var(--muted);
+    font-family: var(--mono); font-size: 0.85rem; overflow-wrap: anywhere;
+}
+
+.callout {
+    background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--amber);
+    border-radius: 10px; padding: 1.25rem 1.5rem;
+}
+.callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+.cs-body ul.plain { padding-left: 1.2rem; max-width: 65ch; }
+.cs-body ul.plain li { margin-bottom: 0.4rem; }
+.pending { color: var(--muted); font-style: italic; }
+
 /* ---------- Footer ---------- */
 footer { border-top: 1px solid var(--line); padding-block: 2rem; color: var(--muted); font-size: 0.92rem; }
 footer p { margin: 0; }
@@ -306,6 +374,14 @@ footer p { margin: 0; }
     .bar { flex-wrap: wrap; gap: 0.5rem 1rem; }
     .topbar nav { order: 3; width: 100%; overflow-x: auto; }
     .topbar nav ul { gap: 1.1rem; white-space: nowrap; }
+}
+
+@media (max-width: 560px) {
+    .finding { grid-template-columns: 1fr; }
+    .finding-num { margin-bottom: 0.25rem; }
+    .contact-form { padding: 1.25rem; }
+    .query { font-size: 0.82rem; padding: 1.1rem; }
+    .projects-grid { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Prediction | Syeda Hafsa</title>
+    <meta name="description" content="Case study: predicting sales from TV, radio and newspaper advertising spend with a Random Forest model.">
+    <!-- DRAFT: remove the next line once the findings below are filled in, then link this page from index.html -->
+    <meta name="robots" content="noindex">
+    <meta name="color-scheme" content="light dark">
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('theme');
+                if (saved === 'dark' || saved === 'light') document.documentElement.setAttribute('data-theme', saved);
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="icon" type="image/png" href="../favicon-32x32.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="topbar">
+    <div class="container bar">
+        <a class="brand" href="../index.html">Syeda Hafsa</a>
+        <a class="back-link" href="../index.html#projects"><i class="fas fa-arrow-left" aria-hidden="true"></i> All projects</a>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to dark theme">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+        </button>
+    </div>
+</header>
+
+<main id="main" class="cs-body">
+
+<section class="cs-head">
+    <div class="container">
+        <p class="eyebrow">Case study · Analytics and BI</p>
+        <h1>How much do TV, radio and newspaper ads move sales?</h1>
+        <p class="lede">A CodeAlpha regression project: predict product sales from advertising spend, and find out which channel is worth the budget.</p>
+        <dl class="cs-meta">
+            <div><dt>Tools</dt><dd>Python, pandas, scikit-learn, Streamlit</dd></div>
+            <div><dt>Model</dt><dd>Random Forest regression</dd></div>
+            <div><dt>Data</dt><dd>Advertising dataset, 200 rows</dd></div>
+            <div><dt>Code</dt><dd><a href="https://github.com/syedahafsa135/CodeAlpha_SalesPrediction" target="_blank" rel="noopener">GitHub repo</a></dd></div>
+        </dl>
+        <!-- Screenshot of the Streamlit app. Exact name: assets/images/sales/app-screenshot.png -->
+        <figure class="shot">
+            <img src="../assets/images/sales/app-screenshot.png" alt="Streamlit app where a user enters TV, radio and newspaper budgets and gets a predicted sales figure" width="1600" height="900">
+            <figcaption>The Streamlit app: enter a budget per channel, get a sales prediction.</figcaption>
+        </figure>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>The business question</h2>
+        <p>A marketing team has a fixed budget across TV, radio and newspaper. How does spend on each channel relate to sales, and can we predict sales for a planned budget before spending it?</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>The data</h2>
+        <ul class="plain">
+            <li><strong>Source:</strong> the Advertising dataset (<code>data/Advertising.csv</code>).</li>
+            <li><strong>Size:</strong> 200 rows, one per market, with advertising spend on TV, radio and newspaper, and the resulting sales.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Approach</h2>
+        <ol class="steps">
+            <li><strong>Prepare</strong><span>Dropped the index column, used the three spend columns as features and sales as the target.</span></li>
+            <li><strong>Split</strong><span>80% of rows for training, 20% held back for testing.</span></li>
+            <li><strong>Model</strong><span>Random Forest regression with 100 trees.</span></li>
+            <li><strong>Evaluate</strong><span>MAE, MSE, RMSE and R² on the held-back test rows, then packaged in a Streamlit app.</span></li>
+        </ol>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Key findings</h2>
+        <!-- TODO (Hafsa): fill these in with the numbers from your re-run. Do not publish estimates. -->
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">01</span>
+            <div>
+                <h3>How accurate is the model on unseen data?</h3>
+                <p class="pending">Result pending: test-set MAE, RMSE and R² are being re-run.</p>
+                <!-- Exact name: assets/images/sales/actual-vs-predicted.png -->
+                <figure class="shot">
+                    <img src="../assets/images/sales/actual-vs-predicted.png" alt="Scatter plot of actual against predicted sales on the test set" width="1200" height="800" loading="lazy">
+                    <figcaption>Actual vs predicted sales on the test set.</figcaption>
+                </figure>
+            </div>
+        </article>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">02</span>
+            <div>
+                <h3>Which channel matters most?</h3>
+                <p class="pending">Result pending: feature importance from the trained model.</p>
+                <!-- Exact name: assets/images/sales/feature-importance.png -->
+                <figure class="shot">
+                    <img src="../assets/images/sales/feature-importance.png" alt="Bar chart of feature importance for TV, radio and newspaper spend" width="1200" height="800" loading="lazy">
+                    <figcaption>Feature importance by advertising channel.</figcaption>
+                </figure>
+            </div>
+        </article>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">03</span>
+            <div>
+                <h3>How does spend relate to sales, channel by channel?</h3>
+                <p class="pending">Result pending.</p>
+                <!-- Exact name: assets/images/sales/spend-vs-sales.png -->
+                <figure class="shot">
+                    <img src="../assets/images/sales/spend-vs-sales.png" alt="Three scatter plots of sales against spend for TV, radio and newspaper" width="1200" height="800" loading="lazy">
+                    <figcaption>Sales against spend for each channel.</figcaption>
+                </figure>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Recommendation</h2>
+        <div class="callout">
+            <p class="pending">To be written once the findings above are in.</p>
+        </div>
+        <div class="project-buttons">
+            <a class="btn primary small" href="https://github.com/syedahafsa135/CodeAlpha_SalesPrediction" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> See the code</a>
+            <a class="btn small" href="../index.html#projects">Back to all projects</a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; <span id="year">2026</span> Syeda Hafsa · <a href="../index.html">Home</a></p>
+    </div>
+</footer>
+
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -32,6 +32,14 @@
             syncToggle();
         });
         syncToggle();
+
+        // If the visitor hasn't picked a theme, follow the system setting live
+        if (window.matchMedia) {
+            var mq = window.matchMedia('(prefers-color-scheme: dark)');
+            var onChange = function () { if (!root.getAttribute('data-theme')) syncToggle(); };
+            if (mq.addEventListener) mq.addEventListener('change', onChange);
+            else if (mq.addListener) mq.addListener(onChange);
+        }
     }
 
     /* ---------- Project filters ---------- */
@@ -57,7 +65,9 @@
     var links = document.querySelectorAll('.topbar nav a');
     var sections = [];
     links.forEach(function (link) {
-        var target = document.querySelector(link.getAttribute('href'));
+        var href = link.getAttribute('href') || '';
+        if (href.charAt(0) !== '#' || href.length < 2) return; // skip links to other pages
+        var target = document.getElementById(href.slice(1));
         if (target) sections.push({ link: link, target: target });
     });
 
@@ -86,6 +96,30 @@
         if (photo.complete && photo.naturalWidth === 0) hidePhoto();
         photo.addEventListener('error', hidePhoto);
     }
+
+    /* ---------- Screenshot slots on case-study pages ----------
+       If an image file hasn't been added yet:
+       - on your own computer, show a dashed box with the file name to add
+       - on the live site, hide the figure so visitors never see a broken image */
+    var isLocal = location.protocol === 'file:' ||
+        location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+
+    document.querySelectorAll('.shot img').forEach(function (img) {
+        function missing() {
+            var fig = img.closest('.shot');
+            if (!fig) return;
+            if (isLocal) {
+                var box = document.createElement('div');
+                box.className = 'shot-missing';
+                box.textContent = 'Add image: ' + img.getAttribute('src').replace(/^(\.\.\/)+/, '');
+                img.replaceWith(box);
+            } else {
+                fig.hidden = true;
+            }
+        }
+        if (img.complete && img.naturalWidth === 0) missing();
+        else img.addEventListener('error', missing);
+    });
 
     /* ---------- Copy email ---------- */
     var copyBtn = document.getElementById('copy-email');

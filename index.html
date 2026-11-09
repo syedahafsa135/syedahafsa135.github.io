@@ -3,233 +3,447 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!--💡UPDATE: Change the title to your name-->
-    <title>Your Name | Data Analysis Portfolio</title>
-      
-    <!--💡UPDATE: Add your favicon here. You can generate one at realfavicongenerator.net-->
-    <link rel="icon" type="image/png" href="/favicon-32x32.png">
-    <link rel="apple-touch-icon" href="/favicon-32x32.png">
-    
-    <!-- Google Fonts for Elegant Typography -->
+    <title>Syeda Hafsa | Data Analyst Portfolio</title>
+    <meta name="description" content="Syeda Hafsa, data analyst working with SQL, Power BI and Python. Projects, experience and contact details.">
+    <meta name="color-scheme" content="light dark">
+
+    <!-- Apply the saved theme before the page paints, so there is no flash of the wrong theme -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('theme');
+                if (saved === 'dark' || saved === 'light') {
+                    document.documentElement.setAttribute('data-theme', saved);
+                }
+            } catch (e) {}
+        })();
+    </script>
+
+    <link rel="icon" type="image/png" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" href="favicon-32x32.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome for Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
-    <!-- Your Stylesheet -->
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
 
-<!-- HEADER SECTION -->
-<header>
-    <div class="container">
-        <!--💡UPDATE: Change to your name and title-->
-        <h1>Your Name</h1>
-        <p>Data Analyst | Power BI Developer | Your Title Here</p>
-        <div class="social-links">
-            <!--💡UPDATE: Add your social media links and CV file-->
-            <a href="[YOUR_LINKEDIN_URL]" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="[YOUR_GITHUB_URL]" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-            <a href="[YOUR_YOUTUBE_URL]" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
-            <a href="assets/Your_Name_CV.pdf" download title="Download CV"><i class="fas fa-file-arrow-down"></i></a>
-        </div>
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+    <div class="container bar">
+        <a class="brand" href="#top">Syeda Hafsa</a>
+        <nav aria-label="Main">
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to dark theme">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+        </button>
     </div>
 </header>
 
-<!-- NAVIGATION -->
-<nav>
-    <div class="container">
-        <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </div>
-</nav>
+<main id="main">
 
-<!-- ABOUT SECTION -->
-<section id="about" class="section">
-    <div class="container">
-        <h2>About Me</h2>
-        <div class="about-content">
-            <!--💡UPDATE: Change the image to your own profile photo in assets/images/-->
-            <img src="assets/images/profile-placeholder.jpg" alt="Your Name" class="profile-photo">
-            <div class="about-text">
-                <!--💡UPDATE: Write your own 'About Me' text here-->
-                <p> I'm a data professional with expertise in transforming complex datasets into actionable insights. My work focuses on creating interactive visualizations and data-driven stories that help organizations make informed decisions.</p>
-                <p>With experience in Power BI, SQL, and data modeling, I specialize in developing comprehensive reports that reveal hidden patterns and trends in data. This portfolio showcases my projects across various sectors.</p>
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+    <div class="container hero-grid">
+        <div>
+            <p class="status"><span class="dot" aria-hidden="true"></span>Open to data analyst and BI roles</p>
+            <h1>I find the story in messy data, then build the dashboard that tells it.</h1>
+            <p class="lede">I'm Syeda Hafsa, a data analyst working with SQL, Power BI and Python. I clean raw data, look for the patterns that matter, and turn them into dashboards and reports people can act on.</p>
+            <div class="actions">
+                <a class="btn primary" href="#projects">See my projects</a>
+                <!-- Put your CV at assets/Syeda_Hafsa_CV.pdf (exact name) for this button to work -->
+                <a class="btn ghost" href="assets/Syeda_Hafsa_CV.pdf" download>
+                    <i class="fas fa-file-arrow-down" aria-hidden="true"></i> Download CV
+                </a>
+            </div>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/syeda-hafsa-140324224" target="_blank" rel="noopener" aria-label="LinkedIn profile"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                <a href="https://github.com/syedahafsa135" target="_blank" rel="noopener" aria-label="GitHub profile"><i class="fab fa-github" aria-hidden="true"></i></a>
+                <a href="mailto:syedahafsa135@gmail.com" aria-label="Email Syeda Hafsa"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <div class="query" role="img" aria-label="A SQL query selecting name, role and tools from analysts where curiosity is high, returning one row: Syeda Hafsa, Data Analyst, SQL, Power BI, Python.">
+            <div aria-hidden="true">
+                <span class="kw">SELECT</span> name, role, tools<br>
+                <span class="kw">FROM</span> analysts<br>
+                <span class="kw">WHERE</span> curiosity = <span class="str">'high'</span>;
+                <table>
+                    <thead>
+                        <tr><th>name</th><th>role</th><th>tools</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Syeda Hafsa</td><td>Data Analyst</td><td>SQL, Power BI, Python</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </section>
 
-<!-- PROJECTS SECTION -->
-<section id="projects" class="section">
+<!-- ============ ABOUT ============ -->
+<section class="section" id="about">
     <div class="container">
-        <h2>My Projects</h2>
+        <h2>About</h2>
+        <div class="about-content">
+            <!-- Add your photo as assets/images/profile.jpg. If it's missing, this block hides itself. -->
+            <img src="assets/images/profile.jpg" alt="Portrait of Syeda Hafsa" class="profile-photo" width="240" height="240">
+            <div class="about-text">
+                <p>I'm studying for an MSc in Data Science at Universiti Kebangsaan Malaysia, after a BSc in Computer Systems Engineering from NED University in Karachi.</p>
+                <p>As a data analyst intern at Technocolabs Software I cleaned raw datasets, ran exploratory analysis to find trends and data quality issues, and built Power BI dashboards around key business metrics. Before that, at Getz Pharma, I designed dashboards and wrote a user requirement specification with cross-functional teams.</p>
+                <p>I like work where the data is messy and the question is real. I'm looking for a data analyst or BI role where I can do more of it.</p>
+            </div>
+        </div>
+
+        <h3 class="sub-head">How I approach a project</h3>
+        <ol class="steps">
+            <li><strong>Start with the decision</strong><span>What will someone do differently with the answer? That shapes which numbers matter.</span></li>
+            <li><strong>Check the data</strong><span>Missing values, duplicates, odd outliers and mismatched definitions get found before any chart is drawn.</span></li>
+            <li><strong>Analyse and visualise</strong><span>EDA, SQL and Python for the analysis; Power BI for dashboards people can explore.</span></li>
+            <li><strong>Recommend</strong><span>End with a clear finding and what to do next, not just a chart.</span></li>
+        </ol>
+    </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section class="section" id="projects">
+    <div class="container">
+        <h2>Projects</h2>
+        <p class="section-intro">Each project starts from a business question.</p>
+
+        <div class="filters" role="group" aria-label="Filter projects">
+            <button class="filter is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="filter" type="button" data-filter="analytics" aria-pressed="false">Analytics and BI</button>
+            <button class="filter" type="button" data-filter="ml" aria-pressed="false">Machine learning and vision</button>
+        </div>
+
         <div class="projects-grid">
 
-            <!--💡UPDATE: Replace this with your own project. Add as many as you like!-->
-            <!-- Project 1 -->
-             <div class="project-card">
-                <!--💡UPDATE: Add a preview image of your project to assets/images/ -->
-                <img src="assets/images/project-placeholder-1.jpg" alt="Project One Preview">
-                <div class="project-card-content">
-                    <h3>Project Title One</h3>
-                    <p>A brief, one or two-sentence description of your project, what it does, and the tools you used.</p>
+            <!-- P2P Lending -->
+            <article class="project-card featured" data-tags="analytics ml">
+                <svg class="project-art" viewBox="0 0 320 110" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+                    <line class="art-line" x1="20" y1="95" x2="300" y2="95"/>
+                    <rect class="art-main" x="40" y="55" width="30" height="40" rx="3"/>
+                    <rect class="art-main" x="90" y="40" width="30" height="55" rx="3"/>
+                    <rect class="art-hot" x="140" y="20" width="30" height="75" rx="3"/>
+                    <rect class="art-main" x="190" y="48" width="30" height="47" rx="3"/>
+                    <rect class="art-main" x="240" y="62" width="30" height="33" rx="3"/>
+                    <polyline class="art-trend" fill="none" points="55,50 105,36 155,15 205,42 255,58"/>
+                </svg>
+                <div class="project-body">
+                    <h3>P2P Lending Risk Analysis</h3>
+                    <ul class="stack" aria-label="Tools used">
+                        <li>SQL</li><li>Python</li><li>Power BI</li><li>scikit-learn</li>
+                    </ul>
+                    <p class="question">Business question: which borrowers and loans carry the most risk for an investor?</p>
+                    <p>Machine learning models and Power BI dashboards to evaluate borrower risk and loan performance, built with SQL and Python.</p>
+                    <p class="result"><strong>Key finding:</strong> 17,010 of 113,937 Prosper loans (14.9%) were charged off, defaulted or past due, and Prosper's risk rating tracks estimated loss closely (r = 0.94).</p>
                     <div class="project-buttons">
-                        <!--💡UPDATE: Add link to your project's code/documentation on GitHub-->
-                        <a href="[YOUR_GITHUB_PROJECT_URL]" target="_blank" class="btn">Documentation</a>
-                        <!--💡UPDATE: Add link to your live dashboard (e.g., Power BI, Tableau Public)-->
-                        <a href="[YOUR_LIVE_DASHBOARD_URL]" target="_blank" class="btn btn-secondary">View Dashboard</a>
+                        <a class="btn small primary" href="projects/p2p-lending.html">Read case study</a>
                     </div>
+                    <!-- The GitHub repo is private (internship work), so no code link here. -->
+                    <p class="private-note"><i class="fas fa-lock" aria-hidden="true"></i> Code is private internship work. Happy to walk through it in an interview.</p>
                 </div>
-            </div>
+            </article>
 
-            <!-- Project 2 -->
-            <div class="project-card">
-                <img src="assets/images/project-placeholder-2.jpg" alt="Project Two Preview">
-                <div class="project-card-content">
-                    <h3>Project Title Two</h3>
-                    <p>A brief, one or two-sentence description of your project, what it does, and the tools you used.</p>
+            <!-- Sales Prediction -->
+            <article class="project-card" data-tags="analytics ml">
+                <svg class="project-art" viewBox="0 0 320 110" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+                    <line class="art-line" x1="20" y1="95" x2="300" y2="95"/>
+                    <circle class="art-dot" cx="45" cy="82" r="5"/>
+                    <circle class="art-dot" cx="80" cy="70" r="5"/>
+                    <circle class="art-dot" cx="110" cy="74" r="5"/>
+                    <circle class="art-dot" cx="145" cy="58" r="5"/>
+                    <circle class="art-dot" cx="175" cy="50" r="5"/>
+                    <circle class="art-dot" cx="210" cy="44" r="5"/>
+                    <circle class="art-dot" cx="240" cy="30" r="5"/>
+                    <circle class="art-hot" cx="275" cy="22" r="6"/>
+                    <line class="art-trend" x1="35" y1="88" x2="290" y2="18"/>
+                </svg>
+                <div class="project-body">
+                    <h3>Sales Prediction</h3>
+                    <ul class="stack" aria-label="Tools used">
+                        <li>Python</li><li>pandas</li><li>scikit-learn</li><li>Streamlit</li>
+                    </ul>
+                    <p class="question">Business question: how does advertising spend on TV, radio and newspaper relate to sales?</p>
+                    <p>A Random Forest regression model trained on advertising spend, evaluated with MAE, MSE, RMSE and R².</p>
+                    <!-- Key finding: add once the test-set results are re-run (none are saved in the repo yet).
+                         Then also link the case study: projects/sales-prediction.html -->
+                    <!-- <p class="result"><strong>Key finding:</strong> ...</p> -->
                     <div class="project-buttons">
-                        <a href="[YOUR_GITHUB_PROJECT_URL]" target="_blank" class="btn">Documentation</a>
-                        <a href="[YOUR_LIVE_DASHBOARD_URL]" target="_blank" class="btn btn-secondary">View Dashboard</a>
+                        <a class="btn small" href="https://github.com/syedahafsa135/CodeAlpha_SalesPrediction" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> Code on GitHub</a>
                     </div>
                 </div>
-            </div>
+            </article>
 
-            <!-- Project 3 -->
-            <div class="project-card">
-                <img src="assets/images/project-placeholder-3.jpg" alt="Project Three Preview">
-                <div class="project-card-content">
-                    <h3>Project Title Three</h3>
-                    <p>A brief, one or two-sentence description of your project, what it does, and the tools you used.</p>
+            <!-- Car Price Prediction -->
+            <article class="project-card" data-tags="analytics ml">
+                <svg class="project-art" viewBox="0 0 320 110" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+                    <line class="art-line" x1="20" y1="95" x2="300" y2="95"/>
+                    <rect class="art-main" x="40" y="70" width="22" height="25" rx="3"/>
+                    <rect class="art-main" x="72" y="60" width="22" height="35" rx="3"/>
+                    <rect class="art-main" x="104" y="52" width="22" height="43" rx="3"/>
+                    <rect class="art-main" x="136" y="45" width="22" height="50" rx="3"/>
+                    <rect class="art-hot" x="168" y="30" width="22" height="65" rx="3"/>
+                    <rect class="art-main" x="200" y="38" width="22" height="57" rx="3"/>
+                    <rect class="art-main" x="232" y="26" width="22" height="69" rx="3"/>
+                    <rect class="art-main" x="264" y="18" width="22" height="77" rx="3"/>
+                </svg>
+                <div class="project-body">
+                    <h3>Car Price Prediction</h3>
+                    <ul class="stack" aria-label="Tools used">
+                        <li>Python</li><li>pandas</li><li>scikit-learn</li><li>Streamlit</li>
+                    </ul>
+                    <p class="question">Business question: which features of a used car drive its selling price?</p>
+                    <p>A Random Forest regression model trained on 301 used-car listings, with one-hot encoding for fuel type, seller type and transmission, evaluated with MAE, RMSE and R².</p>
+                    <!-- Key finding: add once the test-set results are re-run (none are saved in the repo yet).
+                         Then also link the case study: projects/car-price-prediction.html -->
+                    <!-- <p class="result"><strong>Key finding:</strong> ...</p> -->
                     <div class="project-buttons">
-                        <a href="[YOUR_GITHUB_PROJECT_URL]" target="_blank" class="btn">Documentation</a>
-                        <a href="[YOUR_LIVE_DASHBOARD_URL]" target="_blank" class="btn btn-secondary">View Dashboard</a>
+                        <a class="btn small" href="https://github.com/syedahafsa135/CodeAlpha_CarPricePrediction" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> Code on GitHub</a>
                     </div>
                 </div>
-            </div>
+            </article>
 
-            <!-- Project 4 -->
-            <div class="project-card">
-                <img src="assets/images/project-placeholder-4.jpg" alt="Project Four Preview">
-                <div class="project-card-content">
-                    <h3>Project Title Four</h3>
-                    <p>A brief, one or two-sentence description of your project, what it does, and the tools you used.</p>
+            <!-- Final Year Project (full width) -->
+            <article class="project-card wide" data-tags="ml">
+                <svg class="project-art" viewBox="0 0 640 110" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+                    <rect class="art-frame" x="20" y="10" width="180" height="90" rx="6"/>
+                    <rect class="art-box" x="70" y="25" width="60" height="60" rx="2"/>
+                    <rect class="art-frame" x="230" y="10" width="180" height="90" rx="6"/>
+                    <rect class="art-box" x="290" y="55" width="80" height="35" rx="2"/>
+                    <rect class="art-frame" x="440" y="10" width="180" height="90" rx="6"/>
+                    <polyline class="art-pulse" points="455,60 495,60 510,35 525,80 540,50 560,60 605,60"/>
+                </svg>
+                <div class="project-body">
+                    <h3>Final year project: real-time anomaly detection for CCTV</h3>
+                    <ul class="stack" aria-label="Tools used">
+                        <li>YOLO</li><li>OpenCV</li><li>Flask</li><li>React</li><li>Firebase</li><li>CVAT</li>
+                    </ul>
+                    <p class="question">Business question: can a camera feed raise an alert the moment someone falls, a fire starts, a weapon appears or a fight breaks out?</p>
+                    <p>A team project that detects fire, falls, weapons and fights in live video and logs each event for review.</p>
+                    <p class="contrib">My part:</p>
+                    <ul class="contrib-list">
+                        <li>Trained the fall and jump detection models on a 15,000+ image, 7-class dataset</li>
+                        <li>Annotated video data in CVAT</li>
+                        <li>Connected Firebase for live event logging</li>
+                    </ul>
+                    <!-- Source: validation metrics stored inside fall_jump_combined_1_1_25_yolo11n_best.pt (best epoch, bounding boxes) -->
+                    <p class="result"><strong>Key finding:</strong> my 7-class fall and jump model (YOLO11n, 100 epochs) reached 0.72 recall and 0.58 mAP50 across all classes on its validation set.</p>
                     <div class="project-buttons">
-                        <a href="[YOUR_GITHUB_PROJECT_URL]" target="_blank" class="btn">Documentation</a>
-                        <a href="[YOUR_LIVE_DASHBOARD_URL]" target="_blank" class="btn btn-secondary">View Dashboard</a>
+                        <a class="btn small" href="https://github.com/syedahafsa135/survelliance-website" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> Code on GitHub</a>
                     </div>
                 </div>
-            </div>
+            </article>
+
+            <!-- Multiple Disease Prediction -->
+            <article class="project-card" data-tags="ml">
+                <svg class="project-art" viewBox="0 0 320 110" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+                    <line class="art-line" x1="20" y1="60" x2="300" y2="60"/>
+                    <polyline class="art-pulse" points="20,60 90,60 110,25 130,95 150,40 165,60 300,60"/>
+                    <circle class="art-hot" cx="130" cy="95" r="6"/>
+                </svg>
+                <div class="project-body">
+                    <h3>Multiple Disease Prediction</h3>
+                    <ul class="stack" aria-label="Tools used">
+                        <li>Python</li><li>scikit-learn</li><li>Streamlit</li>
+                    </ul>
+                    <p class="question">Question: can simple health measurements flag diabetes or heart disease risk early?</p>
+                    <p>A Streamlit web app with two trained classifiers: an SVM for diabetes and logistic regression for heart disease.</p>
+                    <p class="result"><strong>Key finding:</strong> the heart model scored 0.89 accuracy and 0.91 recall on 61 test patients, but the diabetes model's 0.52 recall means it misses about half of diabetic cases.</p>
+                    <div class="project-buttons">
+                        <a class="btn small" href="https://github.com/syedahafsa135/Multiple_Disease_Prediction_System" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> Code on GitHub</a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Virtual Mouse -->
+            <article class="project-card" data-tags="ml">
+                <svg class="project-art" viewBox="0 0 320 110" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+                    <path class="art-path" d="M30,85 C80,20 140,95 190,45 S260,30 270,40"/>
+                    <path class="art-cursor" d="M262,30 L262,70 L272,60 L280,78 L287,75 L279,57 L293,57 Z"/>
+                </svg>
+                <div class="project-body">
+                    <h3>Virtual Mouse</h3>
+                    <ul class="stack" aria-label="Tools used">
+                        <li>Python</li><li>MediaPipe</li><li>OpenCV</li><li>PyAutoGUI</li>
+                    </ul>
+                    <p class="question">Question: can a webcam replace the mouse for touchless control?</p>
+                    <p>Hand-gesture recognition that moves the cursor, clicks, scrolls and takes screenshots, with screenshots uploaded to Cloudinary.</p>
+                    <div class="project-buttons">
+                        <a class="btn small" href="https://github.com/syedahafsa135/VirtualMouse" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> Code on GitHub</a>
+                    </div>
+                </div>
+            </article>
 
         </div>
     </div>
 </section>
 
-<!-- SKILLS SECTION -->
-<section id="skills" class="section">
+<!-- ============ EXPERIENCE AND EDUCATION ============ -->
+<section class="section" id="experience">
     <div class="container">
-        <h2>Technical Skillset</h2>
+        <h2>Experience and education</h2>
+        <div class="two-col">
+            <div>
+                <h3 class="sub-head">Work</h3>
+                <ol class="timeline">
+                    <li>
+                        <h4>Data Analyst Intern, Technocolabs Software</h4>
+                        <p class="when">Mar 2026 – Jun 2026</p>
+                        <ul>
+                            <li>Cleaned and preprocessed raw datasets and ran EDA to find trends and data quality issues.</li>
+                            <li>Built interactive Power BI dashboards for key business metrics.</li>
+                            <li>Wrote performance reports and defined KPIs.</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h4>IT/IS Intern, Getz Pharma</h4>
+                        <!-- TODO (Hafsa): confirm these dates. LinkedIn says Aug–Sep 2023; this says Aug–Nov 2023. Make both match. -->
+                        <p class="when">Aug 2023 – Nov 2023</p>
+                        <ul>
+                            <li>Designed and optimised interactive dashboards.</li>
+                            <li>Wrote a User Requirement Specification with cross-functional teams.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <h3 class="sub-head">Education</h3>
+                <ol class="timeline">
+                    <li>
+                        <h4>MSc Data Science</h4>
+                        <p class="when">Universiti Kebangsaan Malaysia · Sep 2026 – present</p>
+                    </li>
+                    <li>
+                        <h4>BSc Computer Systems Engineering</h4>
+                        <p class="when">NED University of Engineering and Technology · 2021 – 2025 · CGPA 3.25</p>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section class="section" id="skills">
+    <div class="container">
+        <h2>Skills</h2>
+        <!-- Only tools seen in your experience or repos are listed. Add others you genuinely use (e.g. Excel, DAX). -->
         <div class="skills-table">
-            
-            <!--💡UPDATE: Customize your skills in each category-->
-            <!-- Column 1: Data Visualization -->
             <div class="skill-column">
                 <div class="skill-header">
-                    <i class="fas fa-chart-pie"></i>
-                    <h3>Data Visualization</h3>
+                    <i class="fas fa-chart-column" aria-hidden="true"></i>
+                    <h3>Data visualisation</h3>
                 </div>
                 <ul class="skill-list">
                     <li>Power BI</li>
-                    <li>Tableau</li>
-                    <li>Looker Studio</li>
-                    <li>Excel Dashboards</li>
+                    <li>Dashboard design</li>
+                    <li>Matplotlib</li>
+                    <li>Seaborn</li>
+                    <li>Streamlit</li>
                 </ul>
             </div>
-
-            <!-- Column 2: Data Analysis -->
             <div class="skill-column">
                 <div class="skill-header">
-                    <i class="fas fa-search-plus"></i>
-                    <h3>Data Analysis</h3>
+                    <i class="fas fa-magnifying-glass-chart" aria-hidden="true"></i>
+                    <h3>Data analysis</h3>
                 </div>
                 <ul class="skill-list">
                     <li>SQL</li>
-                    <li>Advanced Excel</li>
-                    <li>Python (Pandas)</li>
-                    <li>Google Sheets</li>
+                    <li>Python</li>
+                    <li>pandas</li>
+                    <li>NumPy</li>
+                    <li>Data cleaning</li>
+                    <li>EDA</li>
+                    <li>KPI definition</li>
+                    <li>Reporting</li>
                 </ul>
             </div>
-
-            <!-- Column 3: Data Modeling & ETL -->
             <div class="skill-column">
                 <div class="skill-header">
-                    <i class="fas fa-cogs"></i>
-                    <h3>Data Modeling & ETL</h3>
+                    <i class="fas fa-gears" aria-hidden="true"></i>
+                    <h3>Modelling and tools</h3>
                 </div>
                 <ul class="skill-list">
-                    <li>Power Query (M)</li>
-                    <li>DAX</li>
-                    <li>Star Schema Design</li>
-                    <li>ETL Processes</li>
+                    <li>scikit-learn</li>
+                    <li>Regression</li>
+                    <li>Classification</li>
+                    <li>YOLO</li>
+                    <li>OpenCV</li>
+                    <li>CVAT</li>
+                    <li>Firebase</li>
+                    <li>Git and GitHub</li>
+                    <li>Jupyter</li>
                 </ul>
             </div>
-
         </div>
+        <p class="lang-line"><strong>Languages:</strong> English (fluent), Urdu (native), Turkish (basic)</p>
     </div>
 </section>
 
-<!-- CONTACT FORM SECTION -->
-<section id="contact" class="section">
-    <div class="container">
-        <h2>Send me a message</h2>
-        
-        <!--💡UPDATE: Go to formsubmit.co and replace the email with your own-->
-        <form action="https://formsubmit.co/your-email@example.com" method="POST" class="contact-form">
-            <p> Interested in collaborating or have questions about my work? I'd love to hear from you!</p>
+<!-- ============ CONTACT ============ -->
+<section class="section" id="contact">
+    <div class="container contact-grid">
+        <div>
+            <h2>Contact</h2>
+            <p>Hiring for a data analyst or BI role, or want to talk about a project? Email me or send a message here.</p>
+            <div class="email-row">
+                <span>syedahafsa135@gmail.com</span>
+                <button class="btn small" id="copy-email" type="button" aria-label="Copy email address">
+                    <i class="far fa-copy" aria-hidden="true"></i> Copy
+                </button>
+            </div>
+            <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/syeda-hafsa-140324224" target="_blank" rel="noopener" aria-label="LinkedIn profile"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                <a href="https://github.com/syedahafsa135" target="_blank" rel="noopener" aria-label="GitHub profile"><i class="fab fa-github" aria-hidden="true"></i></a>
+            </div>
+        </div>
 
-            <!-- Form Fields -->
+        <!-- The first time someone uses this form, FormSubmit emails you an activation link. Click it once. -->
+        <form class="contact-form" action="https://formsubmit.co/syedahafsa135@gmail.com" method="POST">
+            <input type="hidden" name="_subject" value="New message from your portfolio">
+            <input type="hidden" name="_template" value="table">
+            <!-- Honeypot: real people never see or fill this, bots usually do -->
+            <input type="text" name="_honey" class="honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" name="name" id="name" placeholder="Your name" required>
+                <input type="text" name="name" id="name" autocomplete="name" required>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" placeholder="Your email" required>
-            </div>
-            <div class="form-group">
-                <label for="subject">Subject</label>
-                <input type="text" name="subject" id="subject" placeholder="Subject" required>
+                <input type="email" name="email" id="email" autocomplete="email" required>
             </div>
             <div class="form-group">
                 <label for="message">Message</label>
-                <textarea name="message" id="message" rows="6" placeholder="Your message" required></textarea>
+                <textarea name="message" id="message" rows="6" required></textarea>
             </div>
-            
-            <!-- Submit Button -->
-            <button type="submit" class="btn">Send Message</button>
-
+            <button type="submit" class="btn primary">Send message</button>
         </form>
     </div>
 </section>
 
-<!-- FOOTER -->
+</main>
+
 <footer>
     <div class="container">
-        <!--💡UPDATE: Change the year and your name-->
-        <p>&copy; 2025 Your Name. All rights reserved.</p>
+        <p>&copy; <span id="year">2026</span> Syeda Hafsa · Built with HTML, CSS and JavaScript · Hosted on GitHub Pages</p>
     </div>
 </footer>
 
 <script src="assets/js/main.js"></script>
-
 </body>
 </html>
