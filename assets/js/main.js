@@ -44,7 +44,7 @@
 
     /* ---------- Project filters ---------- */
     var filters = document.querySelectorAll('.filter');
-    var cards = document.querySelectorAll('.project-card');
+    var cards = document.querySelectorAll('.project');
 
     filters.forEach(function (btn) {
         btn.addEventListener('click', function () {
