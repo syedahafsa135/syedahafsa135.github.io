@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Prediction | Syeda Hafsa</title>
     <meta name="description" content="Case study: predicting sales from TV, radio and newspaper advertising spend with a Random Forest model.">
-    <!-- DRAFT: remove the next line once the findings below are filled in, then link this page from index.html -->
-    <meta name="robots" content="noindex">
     <meta name="color-scheme" content="light dark">
     <script>
         (function () {
@@ -90,17 +88,19 @@
 <section class="section">
     <div class="container">
         <h2>Key findings</h2>
-        <!-- TODO (Hafsa): fill these in with the numbers from your re-run. Do not publish estimates. -->
-
         <article class="finding">
             <span class="finding-num" aria-hidden="true">01</span>
             <div>
                 <h3>How accurate is the model on unseen data?</h3>
-                <p class="pending">Result pending: test-set MAE, RMSE and R² are being re-run.</p>
-                <!-- Exact name: assets/images/sales/actual-vs-predicted.png -->
+                <p>On the 40 markets held back for testing, the model explains 98.1% of the variation in sales. Its predictions are off by 0.62 sales units on average.</p>
+                <div class="stats">
+                    <div class="stat"><span class="stat-value">0.981</span><span class="stat-label">R² on test markets</span></div>
+                    <div class="stat"><span class="stat-value">0.62</span><span class="stat-label">mean absolute error</span></div>
+                    <div class="stat"><span class="stat-value">0.77</span><span class="stat-label">root mean squared error</span></div>
+                </div>
                 <figure class="shot">
-                    <img src="../assets/images/sales/actual-vs-predicted.png" alt="Scatter plot of actual against predicted sales on the test set" width="1200" height="800" loading="lazy">
-                    <figcaption>Actual vs predicted sales on the test set.</figcaption>
+                    <img src="../assets/images/sales/actual-vs-predicted.png" alt="Scatter plot of actual against predicted sales for the 40 test markets; the points sit close to the perfect-prediction line" width="900" height="900" loading="lazy">
+                    <figcaption>Actual vs predicted sales for the 40 test markets. Points on the dashed line would be perfect predictions.</figcaption>
                 </figure>
             </div>
         </article>
@@ -109,10 +109,9 @@
             <span class="finding-num" aria-hidden="true">02</span>
             <div>
                 <h3>Which channel matters most?</h3>
-                <p class="pending">Result pending: feature importance from the trained model.</p>
-                <!-- Exact name: assets/images/sales/feature-importance.png -->
+                <p>TV spend carries most of the model's predictive power (importance 0.625), radio follows (0.362), and newspaper adds almost nothing (0.013).</p>
                 <figure class="shot">
-                    <img src="../assets/images/sales/feature-importance.png" alt="Bar chart of feature importance for TV, radio and newspaper spend" width="1200" height="800" loading="lazy">
+                    <img src="../assets/images/sales/feature-importance.png" alt="Bar chart of feature importance: TV 0.625, radio 0.362, newspaper 0.013" width="1050" height="525" loading="lazy">
                     <figcaption>Feature importance by advertising channel.</figcaption>
                 </figure>
             </div>
@@ -122,10 +121,9 @@
             <span class="finding-num" aria-hidden="true">03</span>
             <div>
                 <h3>How does spend relate to sales, channel by channel?</h3>
-                <p class="pending">Result pending.</p>
-                <!-- Exact name: assets/images/sales/spend-vs-sales.png -->
+                <p>The raw data tells the same story. Sales climb steadily with TV spend and generally rise with radio spend, though more loosely. Newspaper spend shows no clear pattern at all.</p>
                 <figure class="shot">
-                    <img src="../assets/images/sales/spend-vs-sales.png" alt="Three scatter plots of sales against spend for TV, radio and newspaper" width="1200" height="800" loading="lazy">
+                    <img src="../assets/images/sales/spend-vs-sales.png" alt="Three scatter plots of sales against spend: a clear upward trend for TV, a looser upward trend for radio, and no clear pattern for newspaper" width="1800" height="600" loading="lazy">
                     <figcaption>Sales against spend for each channel.</figcaption>
                 </figure>
             </div>
@@ -137,7 +135,8 @@
     <div class="container">
         <h2>Recommendation</h2>
         <div class="callout">
-            <p class="pending">To be written once the findings above are in.</p>
+            <p>Put the budget into TV first and radio second. Newspaper spend shows almost no link to sales in this data, so it is the first candidate for cuts.</p>
+            <p>These are relationships in 200 markets, not proof of cause and effect. Before moving real budget, test it: shift a small share of newspaper spend into radio in a few markets and compare sales against markets that stayed the same.</p>
         </div>
         <div class="project-buttons">
             <a class="btn primary small" href="https://github.com/syedahafsa135/CodeAlpha_SalesPrediction" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> See the code</a>

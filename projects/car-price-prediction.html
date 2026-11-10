@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Price Prediction | Syeda Hafsa</title>
     <meta name="description" content="Case study: predicting used-car selling prices from age, mileage, fuel type and more with a Random Forest model.">
-    <!-- DRAFT: remove the next line once the findings below are filled in, then link this page from index.html -->
-    <meta name="robots" content="noindex">
     <meta name="color-scheme" content="light dark">
     <script>
         (function () {
@@ -91,17 +89,19 @@
 <section class="section">
     <div class="container">
         <h2>Key findings</h2>
-        <!-- TODO (Hafsa): fill these in with the numbers from your re-run. Do not publish estimates. -->
-
         <article class="finding">
             <span class="finding-num" aria-hidden="true">01</span>
             <div>
                 <h3>How accurate is the price estimate?</h3>
-                <p class="pending">Result pending: test-set MAE, RMSE and R² are being re-run.</p>
-                <!-- Exact name: assets/images/car/actual-vs-predicted.png -->
+                <p>On the 61 cars held back for testing, the model explains 96.4% of the variation in selling price. Its estimates are off by 0.60 lakhs on average. The biggest misses are on the few expensive cars, where the training data has fewest examples.</p>
+                <div class="stats">
+                    <div class="stat"><span class="stat-value">0.964</span><span class="stat-label">R² on test cars</span></div>
+                    <div class="stat"><span class="stat-value">0.60</span><span class="stat-label">mean absolute error (lakhs)</span></div>
+                    <div class="stat"><span class="stat-value">0.91</span><span class="stat-label">root mean squared error (lakhs)</span></div>
+                </div>
                 <figure class="shot">
-                    <img src="../assets/images/car/actual-vs-predicted.png" alt="Scatter plot of actual against predicted selling price on the test set" width="1200" height="800" loading="lazy">
-                    <figcaption>Actual vs predicted selling price on the test set.</figcaption>
+                    <img src="../assets/images/car/actual-vs-predicted.png" alt="Scatter plot of actual against predicted selling price for the 61 test cars; most points sit close to the perfect-prediction line, with larger misses on the most expensive cars" width="900" height="900" loading="lazy">
+                    <figcaption>Actual vs predicted selling price for the 61 test cars. Points on the dashed line would be perfect predictions.</figcaption>
                 </figure>
             </div>
         </article>
@@ -110,10 +110,9 @@
             <span class="finding-num" aria-hidden="true">02</span>
             <div>
                 <h3>Which features drive the price?</h3>
-                <p class="pending">Result pending: feature importance from the trained model.</p>
-                <!-- Exact name: assets/images/car/feature-importance.png -->
+                <p>The car's present (new) price dominates the model (importance 0.884). Model year (0.062) and kilometres driven (0.034) come next. Transmission, fuel type, seller type and number of owners each add less than 0.01.</p>
                 <figure class="shot">
-                    <img src="../assets/images/car/feature-importance.png" alt="Bar chart of feature importance for the car price model" width="1200" height="800" loading="lazy">
+                    <img src="../assets/images/car/feature-importance.png" alt="Bar chart of feature importance: present price 0.884, year 0.062, kilometres driven 0.034, all other features below 0.01" width="1050" height="600" loading="lazy">
                     <figcaption>Feature importance in the Random Forest model.</figcaption>
                 </figure>
             </div>
@@ -122,12 +121,11 @@
         <article class="finding">
             <span class="finding-num" aria-hidden="true">03</span>
             <div>
-                <h3>How do fuel type and transmission affect price?</h3>
-                <p class="pending">Result pending.</p>
-                <!-- Exact name: assets/images/car/price-by-fuel-type.png -->
+                <h3>Does fuel type matter?</h3>
+                <p>Diesel cars sell for clearly more than petrol cars in this data. Yet fuel type barely registers in the model. That suggests the gap comes mostly from which cars are diesel (their new price), not from the fuel itself. With only 2 CNG cars, nothing can be concluded about CNG.</p>
                 <figure class="shot">
-                    <img src="../assets/images/car/price-by-fuel-type.png" alt="Box plot of selling price by fuel type" width="1200" height="800" loading="lazy">
-                    <figcaption>Selling price by fuel type.</figcaption>
+                    <img src="../assets/images/car/price-by-fuel-type.png" alt="Box plot of selling price by fuel type: diesel (60 cars) has a higher median and wider spread than petrol (239 cars); CNG has only 2 cars" width="1050" height="600" loading="lazy">
+                    <figcaption>Selling price by fuel type, with the number of cars in each group.</figcaption>
                 </figure>
             </div>
         </article>
@@ -138,7 +136,8 @@
     <div class="container">
         <h2>Recommendation</h2>
         <div class="callout">
-            <p class="pending">To be written once the findings above are in.</p>
+            <p>To price a used car, start from its current new price, then adjust for age and mileage. Those three inputs carry almost all of the signal. Fuel type, transmission and seller type matter far less than they seem.</p>
+            <p>Use the estimates with care for expensive cars, where the model has the least data and the largest errors. Collecting more high-end listings would be the most useful next step.</p>
         </div>
         <div class="project-buttons">
             <a class="btn primary small" href="https://github.com/syedahafsa135/CodeAlpha_CarPricePrediction" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> See the code</a>
