@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Booking Statistics in R | Syeda Hafsa</title>
+    <meta name="description" content="Case study: statistical analysis of 119,390 hotel bookings in R. Hidden 'NULL' values, Welch t-test, ANOVA with Tukey, chi-square and regression with effect sizes, ending in an executive memo.">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Hotel Booking Statistics in R | Syeda Hafsa">
+    <meta property="og:description" content="119,390 bookings, ~129,000 hidden missing values, and a regression that went from explaining 22% of room-rate variation to 55%.">
+    <meta property="og:url" content="https://syedahafsa135.github.io/projects/hotel-bookings.html">
+    <meta property="og:image" content="https://syedahafsa135.github.io/assets/images/og-card.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="color-scheme" content="light dark">
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('theme');
+                if (saved === 'dark' || saved === 'light') document.documentElement.setAttribute('data-theme', saved);
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="icon" type="image/png" href="../favicon-32x32.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=7">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="topbar">
+    <div class="container bar">
+        <a class="brand" href="../index.html">Syeda Hafsa</a>
+        <a class="back-link" href="../index.html#projects"><i class="fas fa-arrow-left" aria-hidden="true"></i> All projects</a>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to dark theme">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+        </button>
+    </div>
+</header>
+
+<main id="main" class="cs-body">
+
+<section class="cs-head">
+    <div class="container">
+        <p class="eyebrow">Case study · Statistics · Data analytics</p>
+        <h1>What sets the price of a hotel room, and who cancels?</h1>
+        <p class="lede">An MSc statistics project in R on 119,390 bookings from two Portuguese hotels, one in a city and one at a resort. It covers cleaning, four hypothesis tests with effect sizes, and an executive memo for a (hypothetical) CEO.</p>
+        <p class="aside">R said zero missing values. R was being very polite.</p>
+        <dl class="cs-meta">
+            <div><dt>Tools</dt><dd>R 4.6.1, RStudio, tidyverse (readr, dplyr, ggplot2)</dd></div>
+            <div><dt>Data</dt><dd>Hotel Booking Demand (Antonio et al. 2019), 119,390 bookings, 32 variables</dd></div>
+            <div><dt>Methods</dt><dd>Welch t-test, ANOVA + Tukey, chi-square, multiple regression</dd></div>
+            <div><dt>Code</dt><dd><a href="https://github.com/syedahafsa135/hotel-booking-statistical-analysis-r" target="_blank" rel="noopener">GitHub repo</a></dd></div>
+        </dl>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>The problem</h2>
+        <p>A hotel room is perishable: an empty room tonight can't be sold tomorrow. Managers have to set prices and plan for cancellations at the same time. About 37.5% of the cleaned bookings here were cancelled. Which booking features really go with price and with cancellation, and which only look significant because the dataset is huge?</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>The data, and the gaps R couldn't see</h2>
+        <p>The data is the Hotel Booking Demand dataset (Antonio et al. 2019) from the TidyTuesday repository: 119,390 bookings described by 32 variables, including room rate (ADR), lead time, stay length, party size, market segment, deposit type and cancellation.</p>
+        <p>My first missing-value check said only 4 rows had gaps. That seemed too tidy, and the first rows of <code>agent</code> and <code>company</code> contained the word <code>NULL</code>. The file stores missing values as the text "NULL", which <code>is.na()</code> does not count. Counting the text itself revealed about 129,000 hidden gaps.</p>
+        <div class="stats">
+            <div class="stat"><span class="stat-value">112,593</span><span class="stat-label">"NULL" in company (94.3%)</span></div>
+            <div class="stat"><span class="stat-value">16,340</span><span class="stat-label">"NULL" in agent (13.7%)</span></div>
+            <div class="stat"><span class="stat-value">488</span><span class="stat-label">"NULL" in country (0.4%)</span></div>
+        </div>
+        <h3 class="sub-head">Cleaning decisions, each with a reason</h3>
+        <ul class="plain">
+            <li><strong>Dropped</strong> the agent and company columns rather than deleting rows. Neither was needed for the objectives, and imputing them would have invented information.</li>
+            <li><strong>Excluded</strong> a €5,400 rate as an entry error (more than ten times the next value). <strong>Kept</strong> €510, because the top rates form a gradual tail consistent with peak-season rooms.</li>
+            <li><strong>Excluded</strong> 1,960 zero or negative rates, because I couldn't tell free stays from missing prices. Conclusions therefore describe paid stays only.</li>
+            <li><strong>Removed</strong> bookings with no guests, zero nights, an "Undefined" segment or a missing child count. With overlaps, 1,996 rows (1.7%) went, leaving <strong>117,394</strong>.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>What I did</h2>
+        <ol class="steps">
+            <li><strong>Describe</strong><span>Distributions of rate, lead time, stay length and party size by hotel; medians beside means, because both are right-skewed.</span></li>
+            <li><strong>Compare groups</strong><span>Welch t-test (city vs resort rate) and one-way ANOVA, with a Welch ANOVA check and Tukey post-hoc tests across seven market segments.</span></li>
+            <li><strong>Test association</strong><span>Chi-square test of deposit type against cancellation, with Cramér's V.</span></li>
+            <li><strong>Model</strong><span>Correlation, then three regression models for room rate, with residual diagnostics. α = .05, effect sizes reported throughout.</span></li>
+        </ol>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Results</h2>
+        <div class="table-wrap">
+            <table class="cs-table prose">
+                <caption>Four tests on 117,394 cleaned bookings. With this many rows almost everything is "significant", so the effect size column does the real work.</caption>
+                <thead>
+                    <tr><th scope="col">Question</th><th scope="col">Test</th><th scope="col">Result</th><th scope="col">Effect size</th></tr>
+                </thead>
+                <tbody>
+                    <tr><th scope="row">Is the city hotel dearer?</th><td>Welch t-test</td><td>City €106.89 vs resort €96.77 (≈ €10 more), p &lt; .001</td><td>d = 0.22 (small)</td></tr>
+                    <tr><th scope="row">Does market segment matter?</th><td>ANOVA, Welch ANOVA, Tukey</td><td>20 of 21 segment pairs differ; only Direct vs Online TA are alike</td><td>η² = .141 (≈ 14% of rate variation)</td></tr>
+                    <tr><th scope="row">Is deposit type linked to cancelling?</th><td>Chi-square</td><td>99.4% of Non Refund bookings cancelled vs 28.7% with no deposit</td><td>Cramér's V = .48</td></tr>
+                    <tr><th scope="row">How much of the rate can we explain?</th><td>Multiple regression</td><td>Adding month, then a hotel × month interaction</td><td>Adjusted R² .223 → .414 → .551</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="charts cs-charts">
+            <div class="chart-card">
+                <h3 class="chart-title">Cancellation rate by deposit type</h3>
+                <p class="chart-note">Share of bookings cancelled. The non-refundable result runs opposite to intuition, and the data can't say why.</p>
+                <div class="chart" data-chart="hotel-cancel"></div>
+            </div>
+            <div class="chart-card">
+                <h3 class="chart-title">How much of the room rate each model explains</h3>
+                <p class="chart-note">Adjusted R². Season (arrival month) and each hotel's own seasonal pattern do most of the lifting.</p>
+                <div class="chart" data-chart="hotel-r2"></div>
+            </div>
+            <div class="chart-card">
+                <h3 class="chart-title">How much less each segment pays than Online TA</h3>
+                <p class="chart-note">Mean nightly rate gap in euros (Tukey). Direct bookings pay the same as Online TA (€0.28, p = .995).</p>
+                <div class="chart" data-chart="hotel-segment"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>The charts, straight from R</h2>
+        <p>Every chart below comes from <code>R/hotel_analysis.R</code> in the repo (ggplot2), run on the full cleaned data. Re-running the script gives exactly these charts and the same test results as the report.</p>
+        <figure class="shot wide-shot">
+            <img src="../assets/images/hotel/05_seasonality.png" alt="Line chart of mean room rate by arrival month. The resort hotel climbs from about €50 in winter to about €188 in August then drops sharply; the city hotel stays between about €84 and €123 all year." width="1200" height="750" loading="lazy">
+            <figcaption>The chart that shaped the models: the resort's rate swings from about €50 in winter to €188 in August, while the city hotel barely moves. That's why adding a hotel × month interaction lifted adjusted R² to .551.</figcaption>
+        </figure>
+        <div class="gallery">
+            <figure class="shot">
+                <img src="../assets/images/hotel/06_adr_by_segment.png" alt="Boxplots of room rate by market segment. Online TA and Direct sit highest with similar medians; Complementary sits lowest." width="1200" height="750" loading="lazy">
+                <figcaption>Rate by market segment (ANOVA, η² = .141). Online TA and Direct look alike, and Tukey agrees.</figcaption>
+            </figure>
+            <figure class="shot">
+                <img src="../assets/images/hotel/04_cancellation_by_deposit.png" alt="Bar chart of cancellation rate: No Deposit 28.7%, Non Refund 99.4%, Refundable 22.2%." width="1200" height="750" loading="lazy">
+                <figcaption>Cancellation by deposit type (chi-square, Cramér's V = .48). The 99.4% bar is the plot twist.</figcaption>
+            </figure>
+            <figure class="shot">
+                <img src="../assets/images/hotel/03_adr_by_hotel.png" alt="Boxplots of room rate for the city and resort hotels. The city hotel has a higher median and a tighter box; the resort is more spread out with many high outliers." width="1200" height="750" loading="lazy">
+                <figcaption>Rate by hotel (Welch t-test, d = 0.22): city dearer on average, resort far more variable.</figcaption>
+            </figure>
+            <figure class="shot">
+                <img src="../assets/images/hotel/02_adr.png" alt="Histogram of average daily rate, single-peaked and right-skewed, concentrated between about €60 and €130, with mean and median lines." width="1200" height="750" loading="lazy">
+                <figcaption>Room rate is right-skewed (mean €103.50 above median €95.00), so medians are reported beside means.</figcaption>
+            </figure>
+            <figure class="shot">
+                <img src="../assets/images/hotel/01_lead_time.png" alt="Histogram of booking lead time, strongly right-skewed, with most bookings made in the last few weeks and a thin tail beyond 500 days." width="1200" height="750" loading="lazy">
+                <figcaption>Lead time: most bookings come in the last few weeks; a thin tail runs past 500 days.</figcaption>
+            </figure>
+            <figure class="shot">
+                <img src="../assets/images/hotel/07_lead_time_vs_adr.png" alt="Scatter plot of lead time against room rate for a random sample of 5,000 bookings, with an almost flat red regression line." width="1200" height="750" loading="lazy">
+                <figcaption>Lead time vs rate (r = −.09): real, but almost flat. Early-booking discounts are not a big lever.</figcaption>
+            </figure>
+        </div>
+        <details class="data-table">
+            <summary>Show the regression diagnostics</summary>
+            <div class="gallery">
+                <figure class="shot">
+                    <img src="../assets/images/hotel/08_residuals_vs_fitted.png" alt="Residuals against fitted values for Model 2, showing a fan shape where spread grows with the fitted rate." width="1200" height="750" loading="lazy">
+                    <figcaption>Residuals fan out as the fitted rate grows, so equal variance isn't fully met.</figcaption>
+                </figure>
+                <figure class="shot">
+                    <img src="../assets/images/hotel/09_qq_residuals.png" alt="Normal Q-Q plot of Model 2 residuals, curving away from the line in the upper tail." width="1200" height="750" loading="lazy">
+                    <figcaption>A heavy upper tail in the Q-Q plot. I leaned on effect sizes rather than p-values for this reason.</figcaption>
+                </figure>
+            </div>
+        </details>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>From statistics to a CEO memo</h2>
+        <p class="aside">translating p-values into English: a skill and a half.</p>
+        <p>The project ended with a one-page memo to the CEO of a hypothetical two-hotel group. It explains "statistically significant" in plain words and makes six recommendations:</p>
+        <ol class="memo-list">
+            <li><strong>Price by season, starting at the resort.</strong> Its mean rate swings from about €50 in winter to about €188 in August, while the city hotel stays within roughly €84 to €123.</li>
+            <li><strong>Don't rely on a flat "city premium".</strong> The ≈ €10 gap is small and partly reflects when guests stay.</li>
+            <li><strong>Grow direct bookings and review channel discounts.</strong> Direct pays the same as online agencies, while groups pay about €37 less and corporate accounts about €48 less.</li>
+            <li><strong>Treat non-refundable bookings with caution.</strong> Audit how they are recorded and don't count them as secure revenue until that's understood.</li>
+            <li><strong>Price for the number of guests.</strong> Each extra guest adds about €27 a night, the strongest driver in the model.</li>
+            <li><strong>Don't over-invest in lead-time pricing.</strong> Booking 100 days earlier lowers the rate by only about €10.5, and the link is very weak (r = −.09).</li>
+        </ol>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>What I learned</h2>
+        <ul class="plain">
+            <li><strong>Question a clean-looking summary.</strong> The "NULL" text hid over 129,000 gaps from the standard check. Now I count suspicious strings as well as NAs.</li>
+            <li><strong>Significance is cheap in big data.</strong> Lead time and rate correlate at p &lt; .001, yet explain under 1% of rate variation. Effect sizes decide what matters.</li>
+            <li><strong>Write down why, not just what.</strong> A data diary of every cleaning choice made the analysis easy to defend and easy to repeat.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Limitations and next steps</h2>
+        <div class="callout">
+            <ul class="plain">
+                <li>Observational data from two hotels: these are associations, not causes.</li>
+                <li>Residuals fan out as the fitted rate grows, so equal variance and normality are only partly met. Standard errors should be read with care.</li>
+                <li>The best model still leaves 45% of rate variation unexplained; room type, competitor prices and local events aren't recorded.</li>
+                <li>Next: logistic regression to model cancellation directly, and robust standard errors or a time-series model for the uneven residuals.</li>
+            </ul>
+        </div>
+        <div class="project-buttons">
+            <a class="btn primary small" href="https://github.com/syedahafsa135/hotel-booking-statistical-analysis-r" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> See the R code</a>
+            <a class="btn small" href="../index.html#projects">Back to all projects</a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; <span id="year">2026</span> Syeda Hafsa · <a href="../index.html">Home</a></p>
+    </div>
+</footer>
+
+<script src="../assets/js/main.js?v=7"></script>
+</body>
+</html>

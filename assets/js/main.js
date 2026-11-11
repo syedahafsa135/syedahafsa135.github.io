@@ -54,10 +54,14 @@
                 b.classList.toggle('is-active', active);
                 b.setAttribute('aria-pressed', active ? 'true' : 'false');
             });
+            var shown = 0;
             cards.forEach(function (card) {
                 var tags = (card.getAttribute('data-tags') || '').split(' ');
                 card.hidden = !(type === 'all' || tags.indexOf(type) !== -1);
+                if (!card.hidden) shown++;
             });
+            var count = document.getElementById('filter-count');
+            if (count) count.textContent = shown + (shown === 1 ? ' project' : ' projects');
         });
     });
 
@@ -176,6 +180,42 @@
                 ['Accuracy', 0.773, 0.885], ['Precision', 0.757, 0.879],
                 ['Recall', 0.519, 0.906], ['F1 score', 0.615, 0.892]
             ]
+        },
+        /* Loan default (Project 2 report, Table 6 and Table A8) */
+        'loan-auc': {
+            type: 'bars', digits: 3, max: 1, valueName: 'Test ROC AUC',
+            rows: [
+                ['AdaBoost (tuned)', 0.740], ['Random Forest', 0.732], ['Neural network (MLP)', 0.715],
+                ['Naïve Bayes', 0.714], ['Decision Tree', 0.711], ['Approve everything', 0.500]
+            ],
+            tip: function (r) { return r[0] + ': test AUC ' + r[1].toFixed(3) + ' (0.5 = coin flip)'; }
+        },
+        'loan-imp': {
+            type: 'bars', digits: 3, valueName: 'Mean AUC drop',
+            rows: [
+                ['Age', 0.082], ['InterestRate', 0.038], ['LoanToIncome', 0.035],
+                ['MonthsEmployed', 0.030], ['Income', 0.005], ['CreditScore', 0.004]
+            ],
+            tip: function (r) { return 'Shuffling ' + r[0] + ' lowers AUC by ' + r[1].toFixed(3) + ' on average'; }
+        },
+        /* Hotel bookings (Assignment 3 report, Tables 3 and 4, section 5.2) */
+        'hotel-cancel': {
+            type: 'bars', digits: 1, max: 100, valueName: 'Cancelled (%)',
+            rows: [['Non Refund', 99.4], ['No Deposit', 28.7], ['Refundable', 22.2]],
+            tip: function (r) { return r[0] + ': ' + r[1].toFixed(1) + '% of bookings cancelled'; }
+        },
+        'hotel-r2': {
+            type: 'bars', digits: 3, max: 1, valueName: 'Adjusted R²',
+            rows: [['Booking features only', 0.223], ['+ arrival month', 0.414], ['+ hotel × month', 0.551]],
+            tip: function (r) { return r[0] + ': explains ' + (r[1] * 100).toFixed(1) + '% of room-rate variation'; }
+        },
+        'hotel-segment': {
+            type: 'bars', digits: 2, valueName: '€ below Online TA',
+            rows: [
+                ['Direct', 0.28], ['Aviation', 15.24], ['Offline TA/TO', 29.64],
+                ['Groups', 37.47], ['Corporate', 47.51], ['Complementary', 83.95]
+            ],
+            tip: function (r) { return r[0] + ' pays €' + r[1].toFixed(2) + ' a night less than Online TA on average'; }
         }
     };
 
@@ -300,10 +340,29 @@
         }
     }
 
+    var looseCharts = [];
     document.querySelectorAll('[data-chart]').forEach(function (host) {
         var cfg = CHARTS[host.getAttribute('data-chart')];
-        if (cfg) renderChart(host, cfg);
+        if (!cfg) return;
+        renderChart(host, cfg);
+        if (!host.closest('#dashboard')) looseCharts.push(host);
     });
+
+    // Charts outside the dashboard (case-study pages) draw when they scroll into view
+    if (looseCharts.length) {
+        if ('IntersectionObserver' in window) {
+            var chartObs = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('is-drawn');
+                    chartObs.unobserve(entry.target);
+                });
+            }, { threshold: 0.2 });
+            looseCharts.forEach(function (h) { chartObs.observe(h); });
+        } else {
+            looseCharts.forEach(function (h) { h.classList.add('is-drawn'); });
+        }
+    }
 
     /* ---------- Results dashboard: tabs ---------- */
     var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
@@ -392,4 +451,62 @@
     /* ---------- Footer year ---------- */
     var year = document.getElementById('year');
     if (year) year.textContent = new Date().getFullYear();
+
+    /* ---------- Personality layer ---------- */
+    // Scroll progress line at the very top of the page
+    var bar = document.createElement('div');
+    bar.className = 'progress';
+    bar.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(bar);
+    var ticking = false;
+    function updateProgress() {
+        var max = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.setProperty('--p', max > 0 ? Math.min(1, window.scrollY / max) : 0);
+        ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(updateProgress); }
+    }, { passive: true });
+    updateProgress();
+
+    var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Hero: "build the dashboard / model / tool" swaps one word at a time
+    var rot = document.querySelector('.rotator[data-words]');
+    if (rot && !calm) {
+        var words = rot.getAttribute('data-words').split(','), wi = 0;
+        setInterval(function () {
+            rot.classList.add('is-out');
+            setTimeout(function () {
+                wi = (wi + 1) % words.length;
+                rot.textContent = words[wi];
+                rot.classList.remove('is-out');
+            }, 260);
+        }, 2600);
+    }
+
+    // Section content fades up as it scrolls into view (skipped for reduced motion)
+    if (!calm && 'IntersectionObserver' in window) {
+        var items = document.querySelectorAll('.section .section-head, .project, .post, .timeline > li, .skill-column, .finding, .cs-body .section > .container');
+        document.documentElement.classList.add('js');
+        var revealObs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-in');
+                revealObs.unobserve(entry.target);
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+        items.forEach(function (el) {
+            // Anything already on screen at load shows straight away
+            if (el.getBoundingClientRect().top < window.innerHeight) return;
+            el.classList.add('reveal');
+            revealObs.observe(el);
+        });
+    }
+
+    // Console easter egg for the curious recruiter who opens dev tools
+    try {
+        console.log('%c hi, curious one ♡ ', 'background:#B4386A;color:#fff;font:600 14px sans-serif;padding:4px 8px;border-radius:6px');
+        console.log('Hiring? syedahafsa135@gmail.com');
+    } catch (e) {}
 })();

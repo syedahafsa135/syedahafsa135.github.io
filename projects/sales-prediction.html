@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Prediction | Syeda Hafsa</title>
     <meta name="description" content="Case study: predicting sales from TV, radio and newspaper advertising spend with a Random Forest model.">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Sales Prediction | Syeda Hafsa">
+    <meta property="og:description" content="Random Forest regression on advertising spend: R² 0.981 on 40 held-out markets. TV and radio drive sales; newspaper barely registers.">
+    <meta property="og:url" content="https://syedahafsa135.github.io/projects/sales-prediction.html">
+    <meta property="og:image" content="https://syedahafsa135.github.io/assets/images/sales/feature-importance.png">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="color-scheme" content="light dark">
     <script>
         (function () {
@@ -17,9 +23,9 @@
     <link rel="icon" type="image/png" href="../favicon-32x32.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css?v=4">
+    <link rel="stylesheet" href="../assets/css/style.css?v=7">
 </head>
 <body>
 
@@ -42,16 +48,17 @@
         <p class="eyebrow">Case study · Analytics and BI</p>
         <h1>How much do TV, radio and newspaper ads move sales?</h1>
         <p class="lede">A CodeAlpha regression project: predict product sales from advertising spend, and find out which channel is worth the budget.</p>
+        <p class="aside">spoiler: newspaper is not the main character.</p>
         <dl class="cs-meta">
             <div><dt>Tools</dt><dd>Python, pandas, scikit-learn, Streamlit</dd></div>
             <div><dt>Model</dt><dd>Random Forest regression</dd></div>
             <div><dt>Data</dt><dd>Advertising dataset, 200 rows</dd></div>
             <div><dt>Code</dt><dd><a href="https://github.com/syedahafsa135/CodeAlpha_SalesPrediction" target="_blank" rel="noopener">GitHub repo</a></dd></div>
         </dl>
-        <!-- Screenshot of the Streamlit app. Exact name: assets/images/sales/app-screenshot.png -->
+        <!-- Screenshot of the Streamlit app running locally (default inputs, then Predict) -->
         <figure class="shot">
-            <img src="../assets/images/sales/app-screenshot.png" alt="Streamlit app where a user enters TV, radio and newspaper budgets and gets a predicted sales figure" width="1600" height="900">
-            <figcaption>The Streamlit app: enter a budget per channel, get a sales prediction.</figcaption>
+            <img src="../assets/images/sales/app-screenshot.png" alt="Streamlit app: TV budget 100, radio 20, newspaper 30, with the result Predicted Sales: 11.77 units" width="1440" height="900">
+            <figcaption>The Streamlit app running locally: TV 100, radio 20 and newspaper 30 give a predicted 11.77 units.</figcaption>
         </figure>
     </div>
 </section>
@@ -153,6 +160,6 @@
     </div>
 </footer>
 
-<script src="../assets/js/main.js?v=4"></script>
+<script src="../assets/js/main.js?v=7"></script>
 </body>
 </html>
