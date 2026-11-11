@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Price Prediction | Syeda Hafsa</title>
     <meta name="description" content="Case study: predicting used-car selling prices from age, mileage, fuel type and more with a Random Forest model.">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Car Price Prediction | Syeda Hafsa">
+    <meta property="og:description" content="Random Forest regression on 301 used cars: R² 0.964 on 61 held-out cars. The new price alone carries 0.88 of the model's importance.">
+    <meta property="og:url" content="https://syedahafsa135.github.io/projects/car-price-prediction.html">
+    <meta property="og:image" content="https://syedahafsa135.github.io/assets/images/car/actual-vs-predicted.png">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="color-scheme" content="light dark">
     <script>
         (function () {
@@ -14,12 +20,13 @@
             } catch (e) {}
         })();
     </script>
-    <link rel="icon" type="image/png" href="../favicon-32x32.png">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css?v=4">
+    <link rel="stylesheet" href="../assets/css/style.css?v=7">
 </head>
 <body>
 
@@ -42,16 +49,17 @@
         <p class="eyebrow">Case study · Analytics and BI</p>
         <h1>What drives the price of a used car?</h1>
         <p class="lede">A CodeAlpha regression project: estimate a used car's selling price from its age, original price, mileage, fuel type, seller type and transmission.</p>
+        <p class="aside">turns out a car is mostly worth what it was worth new. who knew.</p>
         <dl class="cs-meta">
             <div><dt>Tools</dt><dd>Python, pandas, scikit-learn, Streamlit</dd></div>
             <div><dt>Model</dt><dd>Random Forest regression</dd></div>
             <div><dt>Data</dt><dd>301 used-car listings, 2003–2018</dd></div>
             <div><dt>Code</dt><dd><a href="https://github.com/syedahafsa135/CodeAlpha_CarPricePrediction" target="_blank" rel="noopener">GitHub repo</a></dd></div>
         </dl>
-        <!-- Screenshot of the Streamlit app. Exact name: assets/images/car/app-screenshot.png -->
+        <!-- Screenshot of the Streamlit app running locally (default inputs, then Predict) -->
         <figure class="shot">
-            <img src="../assets/images/car/app-screenshot.png" alt="Streamlit app where a user enters a car's details and gets a predicted selling price" width="1600" height="900">
-            <figcaption>The Streamlit app: enter a car's details, get a price estimate.</figcaption>
+            <img src="../assets/images/car/app-screenshot.png" alt="Streamlit app: inputs for year, present price, kilometres, fuel type, seller type, transmission and previous owners, with the result Predicted Selling Price: 3.50 lakhs" width="1440" height="1080">
+            <figcaption>The Streamlit app running locally: a 2015 petrol car with a 5-lakh new price and 20,000 km gets an estimate of 3.50 lakhs.</figcaption>
         </figure>
     </div>
 </section>
@@ -154,6 +162,6 @@
     </div>
 </footer>
 
-<script src="../assets/js/main.js?v=4"></script>
+<script src="../assets/js/main.js?v=7"></script>
 </body>
 </html>

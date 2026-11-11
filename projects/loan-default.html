@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Default Prediction | Syeda Hafsa</title>
+    <meta name="description" content="Case study: preprocessing 255,347 loans in WEKA and comparing five classifiers in a leakage-free cross-validation pipeline. Tuned AdaBoost reached test AUC 0.740 and recall 0.659.">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Loan Default Prediction | Syeda Hafsa">
+    <meta property="og:description" content="255,347 loans, five classifiers, a leakage-free pipeline and statistical tests. Tuned AdaBoost: test AUC 0.740, recall 0.659.">
+    <meta property="og:url" content="https://syedahafsa135.github.io/projects/loan-default.html">
+    <meta property="og:image" content="https://syedahafsa135.github.io/assets/images/loan/roc-pr-curves.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="color-scheme" content="light dark">
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('theme');
+                if (saved === 'dark' || saved === 'light') document.documentElement.setAttribute('data-theme', saved);
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=7">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="topbar">
+    <div class="container bar">
+        <a class="brand" href="../index.html">Syeda Hafsa</a>
+        <a class="back-link" href="../index.html#projects"><i class="fas fa-arrow-left" aria-hidden="true"></i> All projects</a>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to dark theme">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+        </button>
+    </div>
+</header>
+
+<main id="main" class="cs-body">
+
+<section class="cs-head">
+    <div class="container">
+        <p class="eyebrow">Case study · Machine learning · Data analytics</p>
+        <h1>Which loans will default, and how sure can we be?</h1>
+        <p class="lede">A two-part MSc project at Universiti Kebangsaan Malaysia. First I prepared 255,347 loans in WEKA, Python and Power BI. Then I compared five classifiers in a pipeline built so the test set never leaks into training.</p>
+        <p class="aside">the plot twist: the data looked spotless, and it still wasn't.</p>
+        <dl class="cs-meta">
+            <div><dt>Tools</dt><dd>WEKA 3.8, Python, scikit-learn, imbalanced-learn, Power BI, Google Colab</dd></div>
+            <div><dt>Data</dt><dd>Kaggle Loan Default Prediction, 255,347 loans, 18 attributes</dd></div>
+            <div><dt>Best model</dt><dd>Tuned AdaBoost, test AUC 0.740</dd></div>
+            <div><dt>Code</dt><dd><a href="https://github.com/syedahafsa135/loan-default-classification" target="_blank" rel="noopener">GitHub repo</a></dd></div>
+        </dl>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>The problem</h2>
+        <p>A lender loses most when it approves a borrower who then defaults. Only 11.61% of the loans in this dataset default, so a model can look 88% accurate by approving everyone and still catch nothing. The question: can borrower and loan details flag risky applications, and which technique does it best?</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>The data</h2>
+        <ul class="plain">
+            <li><strong>Source:</strong> Kaggle Loan Default Prediction dataset: 255,347 loans, 18 attributes (age, income, loan amount, credit score, months employed, interest rate, loan term, debt-to-income ratio, education, employment type and more).</li>
+            <li><strong>Class balance:</strong> 29,653 defaults against 225,694 repaid loans (11.61%, about 7.6 to 1).</li>
+            <li><strong>Quality:</strong> no missing values, duplicates or univariate outliers. One cross-attribute check failed: in 17,274 records (6.76%), months employed was longer than the borrower could have worked since age 16.</li>
+        </ul>
+        <div class="gallery">
+            <figure class="shot">
+                <img src="../assets/images/loan/part1-class-balance.png" alt="Bar chart of class distribution before SMOTE: 225,694 repaid loans against 29,653 defaults." width="1794" height="1361" loading="lazy">
+                <figcaption>Before balancing: 225,694 repaid vs 29,653 defaulted.</figcaption>
+            </figure>
+            <figure class="shot">
+                <img src="../assets/images/loan/part1-default-by-employment.png" alt="Horizontal bar chart of default rate by employment type: unemployed about 13.5%, part-time about 12%, self-employed about 11.5%, full-time about 9.5%." width="1935" height="1302" loading="lazy">
+                <figcaption>Default rate by employment type: unemployed borrowers default most, full-time least.</figcaption>
+            </figure>
+        </div>
+        <figure class="shot wide-shot">
+            <img src="../assets/images/loan/part1-correlation-heatmap.png" alt="Correlation heatmap of the numeric attributes and Default. Attributes are uncorrelated with each other; the strongest links to Default are Age (−0.17) and InterestRate (0.13)." width="2612" height="2312" loading="lazy">
+            <figcaption>The first clue the signal is weak: attributes are uncorrelated with each other, and nothing correlates strongly with default (largest: Age −0.17, InterestRate 0.13).</figcaption>
+        </figure>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>What I did: one project, two parts</h2>
+        <p>The work was split into two assignments with their own reports, but it's one continuous project: Part 1 prepares the data, Part 2 builds on it.</p>
+        <h3 class="sub-head">Part 1 · Preprocessing (WEKA 3.8, Python, Power BI)</h3>
+        <ol class="steps">
+            <li><strong>Clean</strong><span>Capped months employed at (Age − 16) × 12 instead of deleting the 17,274 records, so every loan was kept.</span></li>
+            <li><strong>Reduce and construct</strong><span>Added two ratios (LoanToIncome, PrincipalPerMonth). Removed the ID and two weak attributes using information gain, correlation and CFS in WEKA.</span></li>
+            <li><strong>Transform</strong><span>Discretised five attributes into five equal-frequency bins, normalised the rest, drew a stratified 20% sample and balanced classes with SMOTE (90,281 instances, 17 attributes).</span></li>
+        </ol>
+        <h3 class="sub-head" style="margin-top:2rem">Part 2 · Modelling (Python, scikit-learn, imbalanced-learn)</h3>
+        <ol class="steps">
+            <li><strong>Compare five models</strong><span>Decision Tree, Naïve Bayes and an MLP, plus Random Forest and AdaBoost as improvements of the tree.</span></li>
+            <li><strong>Rebuild the pipeline leak-free</strong><span>Part 1's binning, scaling and SMOTE refitted inside each training fold, so no test information leaks in.</span></li>
+            <li><strong>Test, don't eyeball</strong><span>Randomised-search tuning, 5×2 repeated stratified cross-validation, then Friedman and Wilcoxon tests.</span></li>
+        </ol>
+        <figure class="shot">
+            <img src="../assets/images/loan/pipeline.png" alt="Pipeline diagram: cleaned data (255,347 rows) goes through safe steps, a 20% stratified sample of 51,070 rows is split into 40,856 training and 10,214 test rows. Encoding, binning, scaling and SMOTE are fitted only on the training part of each cross-validation fold; validation folds and the test set are never resampled." width="1672" height="726" loading="lazy">
+            <figcaption>The leakage-free pipeline. Binning, scaling and SMOTE are fitted inside each training fold, and the 10,214 test loans stay untouched until the final check.</figcaption>
+        </figure>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Results</h2>
+        <div class="stats">
+            <div class="stat"><span class="stat-value">0.740</span><span class="stat-label">test ROC AUC, tuned AdaBoost</span></div>
+            <div class="stat"><span class="stat-value">0.659</span><span class="stat-label">test recall (781 of 1,186 defaults found)</span></div>
+            <div class="stat"><span class="stat-value">≈21%</span><span class="stat-label">lower cost than approving every loan, under an assumed 5:1 cost ratio</span></div>
+        </div>
+
+        <div class="table-wrap">
+            <table class="cs-table">
+                <caption>Tuned models on the 10,214 test loans (threshold 0.5). CV AUC is the mean over 5×2 cross-validation on the training set.</caption>
+                <thead>
+                    <tr><th scope="col">Model</th><th scope="col">CV AUC</th><th scope="col">Test AUC</th><th scope="col">Recall</th><th scope="col">Precision</th><th scope="col">PR-AUC</th></tr>
+                </thead>
+                <tbody>
+                    <tr class="best"><th scope="row">AdaBoost</th><td>0.735</td><td>0.740</td><td>0.659</td><td>0.221</td><td>0.299</td></tr>
+                    <tr><th scope="row">Random Forest</th><td>0.732</td><td>0.732</td><td>0.557</td><td>0.245</td><td>0.289</td></tr>
+                    <tr><th scope="row">Neural network (MLP)</th><td>0.715</td><td>0.715</td><td>0.591</td><td>0.217</td><td>0.268</td></tr>
+                    <tr><th scope="row">Naïve Bayes</th><td>0.709</td><td>0.714</td><td>0.585</td><td>0.215</td><td>0.257</td></tr>
+                    <tr><th scope="row">Decision Tree</th><td>0.704</td><td>0.711</td><td>0.623</td><td>0.212</td><td>0.247</td></tr>
+                    <tr><th scope="row">Approve everything</th><td>–</td><td>0.500</td><td>0.000</td><td>0.000</td><td>0.116</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">01</span>
+            <div>
+                <h3>Ensembles beat the single tree, and the gap is real</h3>
+                <p>Random Forest and AdaBoost improved on the tuned Decision Tree by 0.027 and 0.031 AUC in cross-validation (Wilcoxon p = 0.002 for both). The Friedman test rejected equal performance across all five models (p = 2.7×10⁻⁷). AdaBoost was chosen on cross-validated AUC, fixed in advance, and never on test results.</p>
+                <figure class="shot">
+                    <img src="../assets/images/loan/roc-pr-curves.png" alt="ROC curves (left) and precision-recall curves (right) of the five tuned models on the test set. AdaBoost sits slightly above the others, with AUC 0.740 and average precision 0.299." width="1198" height="450" loading="lazy">
+                    <figcaption>ROC and precision–recall curves on the test set. The dashed line on the right is the 11.6% default rate.</figcaption>
+                </figure>
+            </div>
+        </article>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">02</span>
+            <div>
+                <h3>SMOTE moved the threshold, not the ranking</h3>
+                <p>With default settings, SMOTE raised recall at the 0.5 threshold from 0.02–0.19 to 0.33–0.58, but AUC stayed the same or fell. SMOTE did not add information. It made the default threshold usable, which moving the threshold would also do.</p>
+            </div>
+        </article>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">03</span>
+            <div>
+                <h3>Four attributes carry almost all the signal</h3>
+                <p>Permutation importance, averaged over the five models: Age (0.082 AUC drop), InterestRate (0.038), LoanToIncome (0.035) and MonthsEmployed (0.030). Every other attribute is below 0.005. LoanToIncome ranks third even though its ingredients (loan amount and income) are near zero on their own, which supports constructing the ratio.</p>
+                <figure class="shot">
+                    <img src="../assets/images/loan/permutation-importance.png" alt="Horizontal bar chart of the ten most important attributes. Age is far ahead at about 0.08, followed by InterestRate, LoanToIncome and MonthsEmployed at 0.03 to 0.04; the rest are near zero." width="758" height="450" loading="lazy">
+                    <figcaption>Mean drop in test AUC when each attribute is shuffled, averaged over all five models.</figcaption>
+                </figure>
+            </div>
+        </article>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">04</span>
+            <div>
+                <h3>A three-level tree a loan officer can read</h3>
+                <p>The tuned tree (depth 7) is hard to read, so I fitted a depth-3 tree for explanation. It gives up some ranking power (test AUC 0.684) in exchange for eight plain rules. The riskiest segment is borrowers aged 40 or younger, with interest above 11.2% and a loan of more than 2.87 times income: 33.0% of those loans defaulted.</p>
+                <figure class="shot">
+                    <img src="../assets/images/loan/depth3-tree.png" alt="Depth-3 decision tree. The first split is age at 40.5, then interest rate and loan-to-income ratio. Blue leaves predict default, orange leaves predict no default." width="1418" height="593" loading="lazy">
+                    <figcaption>Depth-3 explanation tree (class-weighted; blue predicts default).</figcaption>
+                </figure>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>What I learned</h2>
+        <p class="aside">lesson one: "no missing values" is not the same as "clean".</p>
+        <ul class="plain">
+            <li><strong>Univariate checks miss contradictions between columns.</strong> Every months-employed value was plausible on its own. Only a rule comparing it with age found the 17,274 impossible records.</li>
+            <li><strong>Preprocessing can leak.</strong> Project 1 applied SMOTE to the whole dataset, which is fine for demonstrating preprocessing but not for testing a model. In Project 2 I rebuilt every step inside the cross-validation folds.</li>
+            <li><strong>Accuracy is the wrong scoreboard here.</strong> Approving everything scores 88.4% accuracy and zero recall. AUC, PR-AUC, recall and an explicit cost told the real story.</li>
+            <li><strong>Significance tests keep comparisons honest.</strong> AdaBoost beat Random Forest on all 10 folds, but only by 0.004 AUC, so the choice between them is practical rather than dramatic.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Limitations and next steps</h2>
+        <div class="callout">
+            <ul class="plain">
+                <li>The signal in this data is weak (AUC ≤ 0.74), and the attributes look independently generated, so results may not transfer to real loan books.</li>
+                <li>A 20% sample and a single test split; repeated-CV p-values are somewhat optimistic.</li>
+                <li>No logistic regression or gradient boosting baseline yet. Both are the next models to add.</li>
+                <li>SMOTE leaves predicted probabilities uncalibrated, so they should be ranked, not read as risks.</li>
+                <li>The cost analysis uses an assumed 5:1 ratio (missed default vs wrongly flagged loan), not a lender's real figures.</li>
+                <li>Age is the strongest predictor, which raises fairness and legal concerns. Any real use would need a fairness review first.</li>
+            </ul>
+        </div>
+        <div class="project-buttons">
+            <a class="btn primary small" href="https://github.com/syedahafsa135/loan-default-classification" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> See the code</a>
+            <a class="btn small" href="https://github.com/syedahafsa135/loan-default-classification/blob/main/notebooks/loan_default_model_comparison.ipynb" target="_blank" rel="noopener">Open the notebook</a>
+            <a class="btn small" href="../index.html#projects">Back to all projects</a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; <span id="year">2026</span> Syeda Hafsa · <a href="../index.html">Home</a></p>
+    </div>
+</footer>
+
+<script src="../assets/js/main.js?v=7"></script>
+</body>
+</html>
