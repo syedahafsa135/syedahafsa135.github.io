@@ -406,7 +406,7 @@
             <button class="filter" type="button" data-filter="bi" aria-pressed="false">Dashboards / BI</button>
             <button class="filter" type="button" data-filter="software" aria-pressed="false">Software / Systems</button>
         </div>
-        <p class="filter-count" id="filter-count" role="status" aria-live="polite">10 projects</p>
+        <p class="filter-count" id="filter-count" role="status" aria-live="polite">11 projects</p>
 
         <div class="project-list">
 
@@ -429,6 +429,27 @@
                         <img src="assets/images/loan/roc-pr-curves.png" alt="" width="1198" height="450" loading="lazy">
                     </a>
                     <figcaption>ROC and precision–recall curves of the five tuned models.</figcaption>
+                </figure>
+            </article>
+
+            <!-- Loan Default in SQL -->
+            <article class="project" data-tags="analytics">
+                <div class="project-text">
+                    <h3><a href="projects/loan-default-sql.html">Loan default risk in SQL</a></h3>
+                    <p class="tools">SQL (SQLite) · CTEs · window functions · Python · pandas · Matplotlib</p>
+                    <p class="question">Which borrowers default, in numbers a credit team can read?</p>
+                    <p class="desc">Audited and cleaned 255,347 loans in SQLite, then answered 11 risk questions, one SQL file each: GROUP BY/HAVING basics, then CTE chains, moving averages, LAG, NTILE deciles, RANK within partitions and a Pareto cut. Five results were cross-checked in pandas, and all matched.</p>
+                    <p class="result"><strong>Key finding:</strong> four simple red flags take the default rate from 4.9% to 53.2%. Loans with two or more flags are 23.8% of the book but hold 47.4% of defaults.</p>
+                    <div class="links">
+                        <a href="projects/loan-default-sql.html">Read case study →</a>
+                        <a href="https://github.com/syedahafsa135/loan-default-sql" target="_blank" rel="noopener">Code on GitHub</a>
+                    </div>
+                </div>
+                <figure class="project-figure">
+                    <a class="frame photo" href="projects/loan-default-sql.html" tabindex="-1" aria-hidden="true">
+                        <img src="assets/images/loan-sql/red-flag-scorecard.png" alt="" width="1373" height="936" loading="lazy">
+                    </a>
+                    <figcaption>Default rate by number of red flags, from a three-step CTE.</figcaption>
                 </figure>
             </article>
 
@@ -770,7 +791,7 @@
                 <ul class="skill-list">
                     <li>Python (pandas, NumPy)</li>
                     <li>R (tidyverse, ggplot2)</li>
-                    <li>SQL (SQL Server)</li>
+                    <li>SQL: CTEs, window functions (SQLite, SQL Server)</li>
                     <li>Power BI</li>
                     <li>WEKA 3.8</li>
                     <li>Statistics: t-tests, ANOVA, chi-square, regression</li>

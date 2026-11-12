@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Default Risk in SQL | Syeda Hafsa</title>
+    <meta name="description" content="Case study: a SQL analysis in SQLite of 255,347 loans, with CTEs, window functions, NTILE deciles and a four-flag risk scorecard, cross-checked in pandas.">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Loan Default Risk in SQL | Syeda Hafsa">
+    <meta property="og:description" content="255,347 loans in SQLite. Four simple red flags take the default rate from 4.9% to 53.2%; loans with 2+ flags are 24% of the book and 47% of defaults.">
+    <meta property="og:url" content="https://syedahafsa135.github.io/projects/loan-default-sql.html">
+    <meta property="og:image" content="https://syedahafsa135.github.io/assets/images/loan-sql/red-flag-scorecard.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="color-scheme" content="light dark">
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('theme');
+                if (saved === 'dark' || saved === 'light') document.documentElement.setAttribute('data-theme', saved);
+            } catch (e) {}
+        })();
+    </script>
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=7">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="topbar">
+    <div class="container bar">
+        <a class="brand" href="../index.html">Syeda Hafsa</a>
+        <a class="back-link" href="../index.html#projects"><i class="fas fa-arrow-left" aria-hidden="true"></i> All projects</a>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to dark theme">
+            <i class="fas fa-moon" aria-hidden="true"></i>
+        </button>
+    </div>
+</header>
+
+<main id="main" class="cs-body">
+
+<section class="cs-head">
+    <div class="container">
+        <p class="eyebrow">Case study · SQL · Data analytics</p>
+        <h1>Where does the default risk sit in 255,347 loans?</h1>
+        <p class="lede">The same loan dataset as my <a href="loan-default.html">model comparison</a>, asked a different question. Not "which model predicts best?" but "which borrowers default, in numbers a credit team can read?" Everything is answered in SQL, then checked in pandas.</p>
+        <p class="aside">no model, just GROUP BY and good questions.</p>
+        <dl class="cs-meta">
+            <div><dt>Tools</dt><dd>SQL (SQLite), Python, pandas, Matplotlib, Power BI</dd></div>
+            <div><dt>Data</dt><dd>Kaggle Loan Default Prediction, 255,347 loans, 18 columns</dd></div>
+            <div><dt>SQL used</dt><dd>CTEs, window functions (LAG, NTILE, RANK, running sums, moving averages), views</dd></div>
+            <div><dt>Code</dt><dd><a href="https://github.com/syedahafsa135/loan-default-sql" target="_blank" rel="noopener">GitHub repo</a></dd></div>
+        </dl>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>The problem</h2>
+        <p>11.61% of these loans default. A credit team can't run a model on every application, but it can use a few clear rules, if it knows where the risk actually sits. Which borrower traits matter, which ones only seem to, and how concentrated is the risk?</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>The data, and what it can't tell us</h2>
+        <ul class="plain">
+            <li><strong>Source:</strong> the cleaned file from Part 1 of my data science project. It is identical to the Kaggle original apart from two fixes: 17,274 impossible months-employed values capped at (Age − 16) × 12, and apostrophes removed from education labels.</li>
+            <li><strong>Audit in SQL:</strong> 0 duplicate IDs, 0 duplicate rows, 0 NULLs, every value in a plausible range. Default is 0/1, with 29,653 defaults (11.61%).</li>
+            <li><strong>No dates:</strong> no origination date or loan status, so there is no trend or vintage analysis. Some loans marked "not defaulted" may still be running and default later, which makes 11.61% a floor. Window functions run over ordered bands such as age and deciles instead of time.</li>
+            <li><strong>Likely synthetic:</strong> every category is split almost evenly, which real loan books never are. These are patterns to practise on, not facts about real borrowers.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>What I did</h2>
+        <ol class="steps">
+            <li><strong>Load and audit</strong><span>Loaded the CSV into SQLite, then checked IDs, duplicates, NULLs, ranges and every category level. Every issue and decision is written up in <code>notes.md</code>.</span></li>
+            <li><strong>Build a clean table</strong><span>A <code>loans</code> table with a primary key, 0/1 flags with CHECK constraints, two ratios (loan-to-income, principal per month) and readable bands. Its default rate matches the earlier analysis exactly.</span></li>
+            <li><strong>Ask 11 questions</strong><span>Four basic queries (GROUP BY, HAVING) by credit band, income, term, purpose and employment. Then seven advanced ones: CTE chains, a moving average, LAG, NTILE deciles, RANK within partitions, a cohort matrix and a Pareto cut. Each file opens with its question and takeaway.</span></li>
+            <li><strong>Validate</strong><span>pandas recomputed five results straight from the CSV, and all five matched. One instructive difference: pandas' <code>qcut</code> keeps tied values together while SQL's <code>NTILE</code> splits by row count, so their deciles differ slightly.</span></li>
+        </ol>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Results</h2>
+        <div class="stats">
+            <div class="stat"><span class="stat-value">4.9% → 53.2%</span><span class="stat-label">default rate, from no red flags to all four</span></div>
+            <div class="stat"><span class="stat-value">47.4%</span><span class="stat-label">of defaults held by the 23.8% of loans with 2+ flags</span></div>
+            <div class="stat"><span class="stat-value">40 of 120</span><span class="stat-label">segments hold half of all defaults (28.6% of loans)</span></div>
+        </div>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">01</span>
+            <div>
+                <h3>Four red flags separate risk sharply</h3>
+                <p>My model comparison found four attributes carry most of the signal, so I turned them into flags: age under 30, interest rate of 18% or more, a loan 3× income or more, and under 2 years in the current job. Each extra flag roughly doubles the default rate. A third of loans have no flags and default at under 5%. The thresholds are round numbers chosen after looking at the data, so this is a rule of thumb, not a tested model.</p>
+                <figure class="shot">
+                    <img src="../assets/images/loan-sql/red-flag-scorecard.png" alt="Bar chart of default rate by number of red flags: 0 flags 4.9% (33.8% of loans), 1 flag 10.4% (42.4%), 2 flags 20.4% (19.5%), 3 flags 34.6% (4.0%), 4 flags 53.2% (0.3%). The overall rate is 11.61%." width="1373" height="936" loading="lazy">
+                    <figcaption>Built with a three-step CTE in <code>11_adv_cte_scorecard.sql</code>.</figcaption>
+                </figure>
+            </div>
+        </article>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">02</span>
+            <div>
+                <h3>Age is the strongest single signal, and job tenure adds to it</h3>
+                <p>A 5-year moving average (a window <code>AVG</code> with <code>ROWS BETWEEN 2 PRECEDING AND 2 FOLLOWING</code>) falls from 22.2% at 18 to 4.6% at 69. Being under 2 years into a job raises risk in every age band, most of all for the young. 18–24s under 2 years in the job default at 28.78%, against 3.47% for 65–69s with 5+ years.</p>
+                <div class="gallery">
+                    <figure class="shot">
+                        <img src="../assets/images/loan-sql/age-moving-average.png" alt="Line chart of default rate by age with a 5-year moving average falling steadily from 22.2% at age 18 to 4.6% at 69, crossing the 11.61% overall rate around age 40." width="1373" height="882" loading="lazy">
+                        <figcaption>Default rate for each age, with the moving average.</figcaption>
+                    </figure>
+                    <figure class="shot">
+                        <img src="../assets/images/loan-sql/cohort-age-tenure.png" alt="Heatmap of default rate by age band (rows) and time in current job (columns). Highest is 28.8% for 18-24 with under 2 years; lowest is 3.5% for 65-69 with 5+ years. Rates fall down every column and across every row." width="1255" height="905" loading="lazy">
+                        <figcaption>Cohort matrix (pivot by conditional aggregation), standing in for a vintage table.</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </article>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">03</span>
+            <div>
+                <h3>It's the size of the loan relative to income, not low income</h3>
+                <p>Borrowers earning under 30k default at 21.96%, more than twice the rate of those on 120k+. But loans up to 2× income default at about 9% in <em>every</em> income band. Split into ten <code>NTILE</code> groups, interest rate ranks risk smoothly (19.0% down to 5.8%). Loan-to-income packs it into the top group: loans of 4.8× income or more default at 25.9% and hold 22.3% of all defaults.</p>
+                <figure class="shot wide-shot">
+                    <img src="../assets/images/loan-sql/deciles-rate-vs-lti.png" alt="Two bar charts on the same scale. Left: default rate by interest-rate decile falls smoothly from 19.0% to 5.8%. Right: default rate by loan-to-income decile is 25.9% in the top decile, then drops to 14.4% and flattens between 12% and 7.6%." width="1683" height="848" loading="lazy">
+                    <figcaption>Deciles from <code>09_adv_ntile_deciles.sql</code>, shown on the same y-axis.</figcaption>
+                </figure>
+            </div>
+        </article>
+
+        <article class="finding">
+            <span class="finding-num" aria-hidden="true">04</span>
+            <div>
+                <h3>Some "obvious" signals barely matter here</h3>
+                <p>Loan term makes no difference (11.57–11.70% from 12 to 60 months). Credit score has no cliff: the rate falls in small steps from 13.67% at 300–349 to 9.81% at 800+, never by more than 0.71 points per 50 points of score. With <code>RANK() OVER (PARTITION BY employment_type)</code>, Business loans rank riskiest and Home loans safest for every employment type, but the gap is under 2 points.</p>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>What I learned</h2>
+        <p class="aside">lesson one: SQL can answer "where", even when a model can't explain "why".</p>
+        <ul class="plain">
+            <li><strong>Window functions replace a lot of Python.</strong> Moving averages, deciles, running shares and ranks within groups all ran in single queries, with no loops or merges.</li>
+            <li><strong>Check the numbers two ways.</strong> Recomputing results in pandas caught nothing wrong, but it surfaced the NTILE vs qcut difference, which I can now explain.</li>
+            <li><strong>Say what the data can't do.</strong> Without dates there's no vintage analysis, and the default rate is a floor. Writing that down is part of the analysis.</li>
+            <li><strong>Simple rules travel further than models.</strong> A four-flag count, built on the four attributes the model comparison ranked highest, is something a credit team can apply without any code.</li>
+        </ul>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Limitations and next steps</h2>
+        <div class="callout">
+            <ul class="plain">
+                <li>The data is likely synthetic, so the patterns may not hold for a real loan book.</li>
+                <li>The red-flag thresholds were chosen on the same data they describe. The next step is testing them on a held-out split.</li>
+                <li>No dates, so no trend or vintage analysis. With a dataset like Lending Club, I'd add <code>LAG</code> over quarters and default-by-vintage curves.</li>
+                <li>Age is the strongest signal, but age-based lending rules raise legal and fairness issues. This is analysis, not a lending policy.</li>
+            </ul>
+        </div>
+        <div class="project-buttons">
+            <a class="btn primary small" href="https://github.com/syedahafsa135/loan-default-sql" target="_blank" rel="noopener"><i class="fab fa-github" aria-hidden="true"></i> See the SQL</a>
+            <a class="btn small" href="loan-default.html">The model comparison</a>
+            <a class="btn small" href="../index.html#projects">Back to all projects</a>
+        </div>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="container">
+        <p>&copy; <span id="year">2026</span> Syeda Hafsa · <a href="../index.html">Home</a></p>
+    </div>
+</footer>
+
+<script src="../assets/js/main.js?v=7"></script>
+</body>
+</html>
