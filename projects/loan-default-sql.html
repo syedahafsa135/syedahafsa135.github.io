@@ -153,6 +153,17 @@
 
 <section class="section">
     <div class="container">
+        <h2>The dashboard</h2>
+        <p>A one-page Power BI report built on a SQL view (<code>loans_dashboard</code>), so the dashboard reads the same logic as the queries instead of repeating it. Slicers for income band and loan purpose cross-filter every visual. Before publishing, I checked its numbers against the SQL results: 11.61% overall, 47.4% of defaults in loans with two or more flags, and 4.94% to 53.17% by flag count.</p>
+        <figure class="shot wide-shot">
+            <img src="../assets/images/loan-sql/dashboard.png" alt="Power BI dashboard. KPI cards: 255K loans, 11.61% default rate, 30K defaults, 47.4% of defaults in loans with 2+ red flags. Charts: default rate falling with age; default rate by employment type, highest for unemployed; default rate by red flags rising from 4.94% to 53.17%; a heatmap of age band by job tenure from 28.78% to 3.47%; slicers for income band and loan purpose." width="982" height="735" loading="lazy">
+            <figcaption>The Power BI report. <a href="https://github.com/syedahafsa135/loan-default-sql/tree/main/powerbi" target="_blank" rel="noopener">The .pbix file is in the repo.</a></figcaption>
+        </figure>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
         <h2>What I learned</h2>
         <p class="aside">lesson one: SQL can answer "where", even when a model can't explain "why".</p>
         <ul class="plain">
